@@ -306,7 +306,7 @@ struct RouteDetailScene: View {
     }
 
     private var routeMapView: some View {
-        Map(position: $mapPosition) {
+        Map(position: $mapPosition, interactionModes: []) {
             routeMapElements
         }
         .mapStyle(.standard(elevation: .realistic))
