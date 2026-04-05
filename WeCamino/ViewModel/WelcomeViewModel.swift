@@ -29,6 +29,6 @@ final class WelcomeViewModel {
     }
 
     func primaryActionTapped() {
-        navigator.showHome()
+        navigator.showRouteCatalog()
     }
 }
