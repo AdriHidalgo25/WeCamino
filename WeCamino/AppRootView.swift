@@ -3,6 +3,7 @@ import SwiftUI
 struct AppRootView: View {
     private let dependencies: AppDependencies
 
+    @Namespace private var heroNamespace
     @State private var router: AppRouter
 
     init(dependencies: AppDependencies) {
@@ -17,12 +18,13 @@ struct AppRootView: View {
         NavigationStack(path: $bindableRouter.path) {
             WelcomeScene(
                 repository: dependencies.welcomeRepository,
-                navigator: appRouter
+                navigator: appRouter,
+                heroNamespace: heroNamespace
             )
             .navigationDestination(for: AppDestination.self) { destination in
                 switch destination {
                 case .home:
-                    HomePlaceholderView()
+                    HomePlaceholderView(heroNamespace: heroNamespace)
                 }
             }
         }

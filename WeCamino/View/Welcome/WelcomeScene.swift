@@ -1,12 +1,16 @@
 import SwiftUI
 
 struct WelcomeScene: View {
+    private let heroNamespace: Namespace.ID
+
     @State private var viewModel: WelcomeViewModel
 
     init(
         repository: any WelcomeRepository,
-        navigator: any WelcomeRouting
+        navigator: any WelcomeRouting,
+        heroNamespace: Namespace.ID
     ) {
+        self.heroNamespace = heroNamespace
         _viewModel = State(
             initialValue: WelcomeViewModel(
                 repository: repository,
@@ -16,7 +20,10 @@ struct WelcomeScene: View {
     }
 
     var body: some View {
-        WelcomeView(viewModel: viewModel)
+        WelcomeView(
+            heroNamespace: heroNamespace,
+            viewModel: viewModel
+        )
             .task {
                 await viewModel.loadIfNeeded()
             }
