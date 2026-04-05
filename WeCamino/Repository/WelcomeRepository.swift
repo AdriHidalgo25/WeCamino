@@ -7,9 +7,9 @@ protocol WelcomeRepository: Sendable {
 struct LocalWelcomeRepository: WelcomeRepository {
     func fetchWelcomeContent() async -> WelcomeContent {
         WelcomeContent(
-            title: "Bienvenido a WeCamino",
-            message: "Una base SwiftUI con arquitectura MVVM, navegación desacoplada y dependencias inyectadas desde el composition root.",
-            primaryActionTitle: "Comenzar"
+            title: "Walk the Camino your way",
+            message: "Official routes, social check-ins and a brighter home for pilgrims heading to Santiago.",
+            primaryActionTitle: "Explore routes"
         )
     }
 }
