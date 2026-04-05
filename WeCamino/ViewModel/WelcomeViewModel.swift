@@ -6,10 +6,10 @@ import Observation
 final class WelcomeViewModel {
     private let repository: any WelcomeRepository
     private let navigator: any WelcomeRouting
+    private var loadedLanguage: AppLanguage?
 
     private(set) var content: WelcomeContent?
     private(set) var isLoading = false
-    private(set) var hasLoaded = false
 
     init(
         repository: any WelcomeRepository,
@@ -19,12 +19,12 @@ final class WelcomeViewModel {
         self.navigator = navigator
     }
 
-    func loadIfNeeded() async {
-        guard !hasLoaded else { return }
+    func loadIfNeeded(for language: AppLanguage) async {
+        guard loadedLanguage != language else { return }
 
         isLoading = true
-        content = await repository.fetchWelcomeContent()
-        hasLoaded = true
+        content = await repository.fetchWelcomeContent(for: language)
+        loadedLanguage = language
         isLoading = false
     }
 

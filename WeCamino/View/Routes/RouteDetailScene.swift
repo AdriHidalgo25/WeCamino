@@ -2,12 +2,19 @@ import SwiftUI
 import MapKit
 
 struct RouteDetailScene: View {
+    @Environment(\.appStrings) private var strings
+    @Environment(\.colorScheme) private var colorScheme
+
     let routeID: OfficialRoute.ID
     let heroNamespace: Namespace.ID
 
     @State private var viewModel: RouteDetailViewModel
     @State private var hasExpandedHero = false
     @State private var mapPosition: MapCameraPosition = .automatic
+
+    private var palette: AppPalette {
+        AppPalette.make(for: colorScheme)
+    }
 
     init(
         repository: any OfficialRouteRepository,
@@ -35,17 +42,17 @@ struct RouteDetailScene: View {
                             heroCard(route)
 
                             detailSection(
-                                title: "Origin",
+                                title: strings.originTitle,
                                 body: route.origin
                             )
 
                             detailSection(
-                                title: "Route character",
+                                title: strings.routeCharacterTitle,
                                 body: route.terrain
                             )
 
                             detailSection(
-                                title: "Why it matters",
+                                title: strings.whyItMattersTitle,
                                 body: route.officialContext
                             )
 
@@ -60,20 +67,20 @@ struct RouteDetailScene: View {
                         .safeAreaPadding(.bottom, 36)
                     }
                 } else if viewModel.isLoading {
-                    ProgressView("Loading route")
-                        .tint(Color(red: 0.08, green: 0.11, blue: 0.16))
-                        .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                    ProgressView(strings.routeLoading)
+                        .tint(palette.textPrimary)
+                        .foregroundStyle(palette.textPrimary)
                         .safeAreaPadding(.top, 12)
                 } else {
                     ContentUnavailableView(
-                        "Route unavailable",
+                        strings.routeUnavailable,
                         systemImage: "map",
-                        description: Text("We could not load this official route.")
+                        description: Text(strings.routeMapUnavailableMessage)
                     )
                 }
             }
         }
-        .navigationTitle("Route")
+        .navigationTitle(strings.routeNavigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
         .navigationTransition(.zoom(sourceID: routeID, in: heroNamespace))
@@ -86,9 +93,9 @@ struct RouteDetailScene: View {
         ZStack {
             LinearGradient(
                 colors: [
-                    Color(red: 0.98, green: 0.98, blue: 0.97),
-                    Color(red: 0.94, green: 0.97, blue: 1.00),
-                    Color(red: 0.98, green: 0.95, blue: 0.91)
+                    palette.backgroundTop,
+                    palette.backgroundMiddle,
+                    palette.backgroundBottom
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -96,13 +103,13 @@ struct RouteDetailScene: View {
             .ignoresSafeArea()
 
             Circle()
-                .fill(Color.white.opacity(0.82))
+                .fill(palette.glowPrimary)
                 .frame(width: 280, height: 280)
                 .blur(radius: 28)
                 .offset(x: 128, y: -280)
 
             Circle()
-                .fill(Color(red: 0.82, green: 0.93, blue: 1.00).opacity(0.56))
+                .fill(palette.glowSecondary)
                 .frame(width: 320, height: 320)
                 .blur(radius: 40)
                 .offset(x: -150, y: -80)
@@ -169,11 +176,11 @@ struct RouteDetailScene: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text(route.name)
                     .font(.system(size: 32, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                    .foregroundStyle(palette.textPrimary)
 
                 Text(route.shortDescription)
                     .font(.system(size: 15, weight: .medium, design: .rounded))
-                    .foregroundStyle(Color.black.opacity(0.56))
+                    .foregroundStyle(palette.textSecondary)
                     .lineLimit(3)
 
                 routeMetaRow(route: route, style: style)
@@ -183,13 +190,13 @@ struct RouteDetailScene: View {
         .padding(18)
         .background(
             RoundedRectangle(cornerRadius: 34, style: .continuous)
-                .fill(Color.white.opacity(0.98))
+                .fill(palette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 34, style: .continuous)
-                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                        .stroke(palette.border, lineWidth: 1)
                 )
         )
-        .shadow(color: Color.black.opacity(0.08), radius: 20, y: 10)
+        .shadow(color: palette.shadow, radius: 20, y: 10)
         .opacity(hasExpandedHero ? 1 : 0.96)
         .scaleEffect(hasExpandedHero ? 1 : 0.98)
     }
@@ -203,36 +210,36 @@ struct RouteDetailScene: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .fill(Color.white)
+                .fill(palette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 30, style: .continuous)
-                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                        .stroke(palette.border, lineWidth: 1)
                 )
         )
-        .shadow(color: Color.black.opacity(0.05), radius: 14, y: 8)
+        .shadow(color: palette.shadow, radius: 14, y: 8)
     }
 
     private var routeHighlightsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Real highlights")
+                Text(strings.highlightsTitle)
                     .font(.system(size: 20, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                    .foregroundStyle(palette.textPrimary)
 
                 Spacer()
 
-                Text("\(min(viewModel.routeStops.count, 4)) spots")
+                Text("\(min(viewModel.routeStops.count, 4)) \(strings.spotsSuffix)")
                     .font(.system(size: 13, weight: .semibold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.95, green: 0.48, blue: 0.15))
+                    .foregroundStyle(palette.accent)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
-                    .background(Color(red: 1.00, green: 0.94, blue: 0.84), in: Capsule())
+                    .background(palette.accentSoft, in: Capsule())
             }
 
             if viewModel.routeStops.isEmpty, viewModel.isResolvingRouteStops {
-                ProgressView("Loading imagery")
-                    .tint(Color(red: 0.08, green: 0.11, blue: 0.16))
-                    .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                ProgressView(strings.highlightsLoading)
+                    .tint(palette.textPrimary)
+                    .foregroundStyle(palette.textPrimary)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 14) {
@@ -247,36 +254,36 @@ struct RouteDetailScene: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .fill(Color.white)
+                .fill(palette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 30, style: .continuous)
-                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                        .stroke(palette.border, lineWidth: 1)
                 )
         )
-        .shadow(color: Color.black.opacity(0.05), radius: 14, y: 8)
+        .shadow(color: palette.shadow, radius: 14, y: 8)
     }
 
     private func routeMapHeader(_ route: OfficialRoute) -> some View {
         HStack {
-            Text("Route map")
+            Text(strings.routeMapTitle)
                 .font(.system(size: 20, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                .foregroundStyle(palette.textPrimary)
 
             Spacer()
 
-            Text("\(route.stops.count) stops")
+            Text("\(route.stops.count) \(strings.stopsLabel)")
                 .font(.system(size: 13, weight: .semibold, design: .rounded))
-                .foregroundStyle(Color(red: 0.95, green: 0.48, blue: 0.15))
+                .foregroundStyle(palette.accent)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(Color(red: 1.00, green: 0.94, blue: 0.84), in: Capsule())
+                .background(palette.accentSoft, in: Capsule())
         }
     }
 
     private var routeMapCard: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .fill(Color(red: 0.96, green: 0.98, blue: 1.00))
+                .fill(palette.surfaceMuted)
 
             routeMapContent
         }
@@ -284,7 +291,7 @@ struct RouteDetailScene: View {
         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                .stroke(palette.border, lineWidth: 1)
         )
     }
 
@@ -293,14 +300,14 @@ struct RouteDetailScene: View {
         if !viewModel.routeStops.isEmpty {
             routeMapView
         } else if viewModel.isResolvingRouteStops {
-            ProgressView("Loading route map")
-                .tint(Color(red: 0.08, green: 0.11, blue: 0.16))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+            ProgressView(strings.routeLoading)
+                .tint(palette.textPrimary)
+                .foregroundStyle(palette.textPrimary)
         } else {
             ContentUnavailableView(
-                "Map unavailable",
+                strings.routeMapUnavailableTitle,
                 systemImage: "map",
-                description: Text("We could not resolve the stage stops for this route.")
+                description: Text(strings.routeMapUnavailableMessage)
             )
         }
     }
@@ -349,10 +356,10 @@ struct RouteDetailScene: View {
 
             Text(stop.stop.name)
                 .font(.system(size: 11, weight: .semibold, design: .rounded))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                .foregroundStyle(palette.textPrimary)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 5)
-                .background(Color.white.opacity(0.94), in: Capsule())
+                .background(palette.surfaceMuted, in: Capsule())
         }
     }
 
@@ -360,13 +367,13 @@ struct RouteDetailScene: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Stages")
+                    Text(strings.stagesTitle)
                         .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                        .foregroundStyle(palette.textPrimary)
 
-                    Text("\(route.stages.count) stages · \(route.totalDistanceKilometers.formatted(.number.precision(.fractionLength(1)))) km")
+                    Text("\(route.stages.count) \(strings.layersValue.lowercased()) · \(route.totalDistanceKilometers.formatted(.number.precision(.fractionLength(1)))) km")
                         .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color.black.opacity(0.56))
+                        .foregroundStyle(palette.textSecondary)
                 }
 
                 Spacer()
@@ -383,13 +390,13 @@ struct RouteDetailScene: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .fill(Color.white)
+                .fill(palette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 30, style: .continuous)
-                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                        .stroke(palette.border, lineWidth: 1)
                 )
         )
-        .shadow(color: Color.black.opacity(0.05), radius: 14, y: 8)
+        .shadow(color: palette.shadow, radius: 14, y: 8)
     }
 
     private func detailSection(
@@ -399,23 +406,23 @@ struct RouteDetailScene: View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
                 .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                .foregroundStyle(palette.textPrimary)
 
             Text(body)
                 .font(.system(size: 15, weight: .medium, design: .rounded))
-                .foregroundStyle(Color.black.opacity(0.56))
+                .foregroundStyle(palette.textSecondary)
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(Color.white)
+                .fill(palette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                        .stroke(palette.border, lineWidth: 1)
                 )
         )
-        .shadow(color: Color.black.opacity(0.04), radius: 12, y: 6)
+        .shadow(color: palette.shadow, radius: 12, y: 6)
     }
 
     private func routeIcon(style: OfficialRouteVisualStyle) -> some View {
@@ -446,10 +453,10 @@ struct RouteDetailScene: View {
     private func routeMetaPill(_ title: String, systemImage: String) -> some View {
         Label(title, systemImage: systemImage)
             .font(.system(size: 12, weight: .semibold, design: .rounded))
-            .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+            .foregroundStyle(palette.textPrimary)
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
-            .background(Color.black.opacity(0.05), in: Capsule())
+            .background(palette.surfaceMuted, in: Capsule())
     }
 
     private func stageRow(
@@ -459,31 +466,31 @@ struct RouteDetailScene: View {
         HStack(alignment: .top, spacing: 14) {
             Text("\(index)")
                 .font(.system(size: 15, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                .foregroundStyle(palette.textPrimary)
                 .frame(width: 34, height: 34)
-                .background(Color(red: 1.00, green: 0.94, blue: 0.84), in: Circle())
+                .background(palette.accentSoft, in: Circle())
 
             VStack(alignment: .leading, spacing: 8) {
                 Text("\(stage.start.name) -> \(stage.end.name)")
                     .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                    .foregroundStyle(palette.textPrimary)
 
-                Text(stage.mode == .maritime ? "Maritime segment" : "Walking stage")
+                Text(stage.mode == .maritime ? strings.maritimeSegmentLabel : strings.walkingStageLabel)
                     .font(.system(size: 13, weight: .medium, design: .rounded))
-                    .foregroundStyle(Color.black.opacity(0.54))
+                    .foregroundStyle(palette.textSecondary)
             }
 
             Spacer()
 
             Text("\(stage.distanceKilometers.formatted(.number.precision(.fractionLength(1)))) km")
                 .font(.system(size: 14, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.95, green: 0.48, blue: 0.15))
+                .foregroundStyle(palette.accent)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(Color(red: 1.00, green: 0.94, blue: 0.84), in: Capsule())
+                .background(palette.accentSoft, in: Capsule())
         }
         .padding(18)
-        .background(Color(red: 0.98, green: 0.98, blue: 0.97), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .background(palette.surfaceMuted, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
 
     private func loadRouteAndAnimateHero() async {
@@ -506,6 +513,8 @@ struct RouteDetailScene: View {
 }
 
 private struct RouteHeroPreview: View {
+    @Environment(\.appStrings) private var strings
+
     let stop: OfficialRoute.Stop?
 
     @State private var scene: MKLookAroundScene?
@@ -537,7 +546,7 @@ private struct RouteHeroPreview: View {
                         .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(.white.opacity(0.92))
 
-                    Text(stop?.name ?? "Camino view")
+                    Text(stop?.name ?? strings.routeNavigationTitle)
                         .font(.system(size: 13, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
                         .lineLimit(2)
@@ -556,11 +565,11 @@ private struct RouteHeroPreview: View {
             )
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Real scenery")
+                Text(strings.highlightsTitle)
                     .font(.system(size: 11, weight: .semibold, design: .rounded))
                     .foregroundStyle(Color.white.opacity(0.78))
 
-                Text(stop?.name ?? "Stage stop")
+                Text(stop?.name ?? strings.routeMapTitle)
                     .font(.system(size: 15, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                     .lineLimit(2)
@@ -590,10 +599,17 @@ private struct RouteHeroPreview: View {
 }
 
 private struct RouteHighlightCard: View {
+    @Environment(\.appStrings) private var strings
+    @Environment(\.colorScheme) private var colorScheme
+
     let stop: RouteStopAnnotation
 
     @State private var scene: MKLookAroundScene?
     @State private var isLoading = false
+
+    private var palette: AppPalette {
+        AppPalette.make(for: colorScheme)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -639,21 +655,21 @@ private struct RouteHighlightCard: View {
 
             Text(stop.stop.name)
                 .font(.system(size: 15, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                .foregroundStyle(palette.textPrimary)
                 .lineLimit(2)
 
-            Text("Stage stop")
+            Text(strings.stageStopLabel)
                 .font(.system(size: 12, weight: .medium, design: .rounded))
-                .foregroundStyle(Color.black.opacity(0.54))
+                .foregroundStyle(palette.textSecondary)
         }
         .frame(width: 220, alignment: .leading)
         .padding(12)
         .background(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(Color(red: 0.99, green: 0.99, blue: 0.98))
+                .fill(palette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                        .stroke(palette.border, lineWidth: 1)
                 )
         )
         .task {

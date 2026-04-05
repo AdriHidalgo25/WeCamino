@@ -1,10 +1,25 @@
 import SwiftUI
 
 struct WelcomeView: View {
+    @Environment(\.appStrings) private var strings
+    @Environment(\.colorScheme) private var colorScheme
+
     let heroNamespace: Namespace.ID
 
     @Bindable var viewModel: WelcomeViewModel
     @State private var hasAnimatedIn = false
+
+    private var palette: AppPalette {
+        AppPalette.make(for: colorScheme)
+    }
+
+    private var pastelPrimaryText: Color {
+        Color(red: 0.11, green: 0.14, blue: 0.20)
+    }
+
+    private var pastelSecondaryText: Color {
+        Color(red: 0.26, green: 0.30, blue: 0.36).opacity(0.82)
+    }
 
     var body: some View {
         ZStack {
@@ -14,11 +29,11 @@ struct WelcomeView: View {
                 if let content = viewModel.content {
                     loadedState(content: content)
                 } else if viewModel.isLoading {
-                    ProgressView("Loading home")
-                        .tint(Color(red: 0.09, green: 0.12, blue: 0.17))
+                    ProgressView(strings.homeLoading)
+                        .tint(palette.textPrimary)
                 } else {
                     ContentUnavailableView(
-                        "Home unavailable",
+                        strings.homeUnavailable,
                         systemImage: "exclamationmark.triangle"
                     )
                 }
@@ -41,9 +56,9 @@ struct WelcomeView: View {
         ZStack {
             LinearGradient(
                 colors: [
-                    Color(red: 0.98, green: 0.98, blue: 0.97),
-                    Color(red: 0.92, green: 0.96, blue: 1.00),
-                    Color(red: 0.95, green: 0.94, blue: 0.90)
+                    palette.backgroundTop,
+                    palette.backgroundMiddle,
+                    palette.backgroundBottom
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -51,13 +66,13 @@ struct WelcomeView: View {
             .ignoresSafeArea()
 
             Circle()
-                .fill(Color.white.opacity(0.84))
+                .fill(palette.glowPrimary)
                 .frame(width: 280, height: 280)
                 .blur(radius: 24)
                 .offset(x: 110, y: -300)
 
             Circle()
-                .fill(Color(red: 0.77, green: 0.92, blue: 1.00).opacity(0.55))
+                .fill(palette.glowSecondary)
                 .frame(width: 320, height: 320)
                 .blur(radius: 36)
                 .offset(x: -150, y: -120)
@@ -105,18 +120,18 @@ struct WelcomeView: View {
             } icon: {
                 Image(systemName: "figure.hiking.circle.fill")
                     .font(.system(size: 22))
-                    .foregroundStyle(Color(red: 0.95, green: 0.48, blue: 0.15))
+                    .foregroundStyle(palette.accent)
             }
-            .foregroundStyle(Color(red: 0.10, green: 0.12, blue: 0.17))
+            .foregroundStyle(palette.textPrimary)
 
             Spacer()
 
             Button {} label: {
                 Image(systemName: "bell")
                     .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(Color(red: 0.10, green: 0.12, blue: 0.17))
+                    .foregroundStyle(palette.textPrimary)
                     .frame(width: 44, height: 44)
-                    .background(Color.white.opacity(0.92), in: Circle())
+                    .background(palette.surfaceMuted, in: Circle())
             }
             .buttonStyle(.plain)
         }
@@ -126,11 +141,11 @@ struct WelcomeView: View {
         VStack(alignment: .leading, spacing: 18) {
             Text(content.title)
                 .font(.system(size: 38, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                .foregroundStyle(palette.textPrimary)
 
-            Text("Follow the Camino with official routes, check-ins and pilgrim groups in one bright, social experience.")
+            Text(content.message)
                 .font(.system(size: 16, weight: .medium, design: .rounded))
-                .foregroundStyle(Color.black.opacity(0.56))
+                .foregroundStyle(palette.textSecondary)
 
             Spacer(minLength: 0)
 
@@ -142,7 +157,7 @@ struct WelcomeView: View {
             Button(action: viewModel.primaryActionTapped) {
                 Text(content.primaryActionTitle)
                     .font(.system(size: 17, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.10, green: 0.12, blue: 0.17))
+                    .foregroundStyle(pastelPrimaryText)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
                     .background(
@@ -156,27 +171,27 @@ struct WelcomeView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 36, style: .continuous)
-                .fill(Color.white.opacity(0.96))
+                .fill(palette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 36, style: .continuous)
-                        .stroke(Color.white.opacity(0.92), lineWidth: 1)
+                        .stroke(palette.border, lineWidth: 1)
                 )
         )
-        .shadow(color: Color.black.opacity(0.09), radius: 24, y: 12)
+        .shadow(color: palette.shadow, radius: 24, y: 12)
     }
 
     private var statusStrip: some View {
         HStack(spacing: 12) {
             compactStatusCard(
-                title: "Official routes",
-                value: "10",
+                title: strings.officialRoutesLabel,
+                value: strings.routesCountValue,
                 tint: Color(red: 0.84, green: 0.95, blue: 0.83),
                 systemImage: "map.fill"
             )
 
             compactStatusCard(
-                title: "Check-ins",
-                value: "Manual",
+                title: strings.checkInsLabel,
+                value: strings.manualLabel,
                 tint: Color(red: 1.00, green: 0.94, blue: 0.82),
                 systemImage: "location.fill"
             )
@@ -185,20 +200,20 @@ struct WelcomeView: View {
 
     private var quickActions: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Text("Quick actions")
+            Text(strings.quickActionsTitle)
                 .font(.system(size: 20, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                .foregroundStyle(palette.textPrimary)
 
             quickActionCard(
-                title: "Explore official routes",
-                subtitle: "Jump into the Camino catalog and compare the mood of each route.",
+                title: strings.exploreRoutesTitle,
+                subtitle: strings.exploreRoutesSubtitle,
                 systemImage: "point.bottomleft.forward.to.point.topright.scurvepath.fill",
                 accent: Color(red: 0.98, green: 0.66, blue: 0.18)
             )
 
             quickActionCard(
-                title: "Pilgrim groups are next",
-                subtitle: "The social layer is ready for routes, companions and future profile motion.",
+                title: strings.groupsSoonTitle,
+                subtitle: strings.groupsSoonSubtitle,
                 systemImage: "person.3.fill",
                 accent: Color(red: 0.56, green: 0.78, blue: 0.40)
             )
@@ -208,16 +223,16 @@ struct WelcomeView: View {
     private var featuredRoutes: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
-                Text("Featured routes")
+                Text(strings.featuredRoutesTitle)
                     .font(.system(size: 20, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                    .foregroundStyle(palette.textPrimary)
 
                 Spacer()
 
                 Button(action: viewModel.primaryActionTapped) {
-                    Text("See all")
+                    Text(strings.seeAll)
                         .font(.system(size: 13, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color(red: 0.95, green: 0.48, blue: 0.15))
+                        .foregroundStyle(palette.accent)
                 }
                 .buttonStyle(.plain)
             }
@@ -226,13 +241,13 @@ struct WelcomeView: View {
                 HStack(spacing: 14) {
                     featuredRouteCard(
                         title: "Camino Frances",
-                        subtitle: "The most iconic route into Santiago.",
+                        subtitle: strings.featuredFrancesSubtitle,
                         colors: [Color(red: 0.40, green: 0.73, blue: 0.99), Color(red: 0.99, green: 0.84, blue: 0.48)]
                     )
 
                     featuredRouteCard(
                         title: "Camino del Norte",
-                        subtitle: "Atlantic energy and rugged coastline.",
+                        subtitle: strings.featuredNorteSubtitle,
                         colors: [Color(red: 0.47, green: 0.84, blue: 0.98), Color(red: 0.31, green: 0.64, blue: 0.86)]
                     )
                 }
@@ -256,11 +271,11 @@ struct WelcomeView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.system(size: 13, weight: .medium, design: .rounded))
-                    .foregroundStyle(Color.black.opacity(0.56))
+                    .foregroundStyle(pastelSecondaryText)
 
                 Text(value)
                     .font(.system(size: 17, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                    .foregroundStyle(pastelPrimaryText)
             }
         }
         .padding(14)
@@ -287,11 +302,11 @@ struct WelcomeView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(title)
                     .font(.system(size: 17, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                    .foregroundStyle(palette.textPrimary)
 
                 Text(subtitle)
                     .font(.system(size: 14, weight: .medium, design: .rounded))
-                    .foregroundStyle(Color.black.opacity(0.54))
+                    .foregroundStyle(palette.textSecondary)
             }
 
             Spacer()
@@ -299,13 +314,13 @@ struct WelcomeView: View {
         .padding(18)
         .background(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(Color.white)
+                .fill(palette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                        .stroke(palette.border, lineWidth: 1)
                 )
         )
-        .shadow(color: Color.black.opacity(0.06), radius: 14, y: 8)
+        .shadow(color: palette.shadow, radius: 14, y: 8)
     }
 
     private func featuredRouteCard(
@@ -319,19 +334,23 @@ struct WelcomeView: View {
 
             Text(title)
                 .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                .foregroundStyle(palette.textPrimary)
 
             Text(subtitle)
                 .font(.system(size: 14, weight: .medium, design: .rounded))
-                .foregroundStyle(Color.black.opacity(0.54))
+                .foregroundStyle(palette.textSecondary)
         }
         .padding(16)
         .frame(width: 262, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(Color.white)
+                .fill(palette.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        .stroke(palette.border, lineWidth: 1)
+                )
         )
-        .shadow(color: Color.black.opacity(0.06), radius: 14, y: 8)
+        .shadow(color: palette.shadow, radius: 14, y: 8)
     }
 }
 

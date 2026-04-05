@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct WelcomeScene: View {
+    @Environment(AppPreferencesStore.self) private var preferences
+
     private let heroNamespace: Namespace.ID
 
     @State private var viewModel: WelcomeViewModel
@@ -24,8 +26,8 @@ struct WelcomeScene: View {
             heroNamespace: heroNamespace,
             viewModel: viewModel
         )
-            .task {
-                await viewModel.loadIfNeeded()
+            .task(id: preferences.resolvedLanguage) {
+                await viewModel.loadIfNeeded(for: preferences.resolvedLanguage)
             }
     }
 }

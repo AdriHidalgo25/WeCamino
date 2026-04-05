@@ -1,10 +1,17 @@
 import SwiftUI
 
 struct RouteCatalogScene: View {
+    @Environment(\.appStrings) private var strings
+    @Environment(\.colorScheme) private var colorScheme
+
     let heroNamespace: Namespace.ID
 
     @State private var viewModel: RouteCatalogViewModel
     @State private var hasAnimatedIn = false
+
+    private var palette: AppPalette {
+        AppPalette.make(for: colorScheme)
+    }
 
     init(
         repository: any OfficialRouteRepository,
@@ -20,8 +27,8 @@ struct RouteCatalogScene: View {
 
             Group {
                 if viewModel.isLoading && viewModel.routes.isEmpty {
-                    ProgressView("Loading routes")
-                        .tint(Color(red: 0.08, green: 0.11, blue: 0.16))
+                    ProgressView(strings.routesLoading)
+                        .tint(palette.textPrimary)
                 } else {
                     ScrollView(.vertical, showsIndicators: false) {
                         LazyVStack(alignment: .leading, spacing: 20) {
@@ -59,9 +66,9 @@ struct RouteCatalogScene: View {
         ZStack {
             LinearGradient(
                 colors: [
-                    Color(red: 0.98, green: 0.98, blue: 0.97),
-                    Color(red: 0.94, green: 0.97, blue: 1.00),
-                    Color(red: 0.98, green: 0.95, blue: 0.91)
+                    palette.backgroundTop,
+                    palette.backgroundMiddle,
+                    palette.backgroundBottom
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -69,7 +76,7 @@ struct RouteCatalogScene: View {
             .ignoresSafeArea()
 
             Circle()
-                .fill(Color.white.opacity(0.8))
+                .fill(palette.glowPrimary)
                 .frame(width: 280, height: 280)
                 .blur(radius: 26)
                 .offset(x: 140, y: -280)
@@ -78,17 +85,17 @@ struct RouteCatalogScene: View {
 
     private var routeStats: some View {
         HStack(spacing: 12) {
-            statTile(title: "Routes", value: "\(viewModel.routes.count)", tint: Color(red: 0.86, green: 0.96, blue: 0.84))
-            statTile(title: "Source", value: "Official", tint: Color(red: 1.00, green: 0.94, blue: 0.84))
-            statTile(title: "Layers", value: "Stages", tint: Color(red: 0.85, green: 0.93, blue: 1.00))
+            statTile(title: strings.tabRoutes, value: "\(viewModel.routes.count)", tint: Color(red: 0.86, green: 0.96, blue: 0.84))
+            statTile(title: strings.sourceTitle, value: strings.sourceValue, tint: Color(red: 1.00, green: 0.94, blue: 0.84))
+            statTile(title: strings.layersTitle, value: strings.layersValue, tint: Color(red: 0.85, green: 0.93, blue: 1.00))
         }
     }
 
     private var routeList: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Browse routes")
+            Text(strings.routesTitle)
                 .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                .foregroundStyle(palette.textPrimary)
 
             ForEach(viewModel.routes) { route in
                 NavigationLink(value: AppDestination.routeDetail(route.id)) {
@@ -100,20 +107,27 @@ struct RouteCatalogScene: View {
     }
 
     private func statTile(title: String, value: String, tint: Color) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
+        let titleColor = Color(red: 0.24, green: 0.28, blue: 0.34).opacity(0.78)
+        let valueColor = Color(red: 0.11, green: 0.14, blue: 0.20)
+
+        return VStack(alignment: .leading, spacing: 6) {
             Text(title)
                 .font(.system(size: 12, weight: .medium, design: .rounded))
-                .foregroundStyle(Color.black.opacity(0.54))
+                .foregroundStyle(titleColor)
 
             Text(value)
                 .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                .foregroundStyle(valueColor)
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 24, style: .continuous)
                 .fill(tint)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .stroke(Color.white.opacity(0.18), lineWidth: 1)
+                )
         )
     }
 
@@ -128,11 +142,11 @@ struct RouteCatalogScene: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(route.name)
                         .font(.system(size: 23, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+                        .foregroundStyle(palette.textPrimary)
 
                     Text(route.shortDescription)
                         .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color.black.opacity(0.56))
+                        .foregroundStyle(palette.textSecondary)
                         .lineLimit(2)
                 }
 
@@ -140,42 +154,42 @@ struct RouteCatalogScene: View {
 
                 Image(systemName: "arrow.up.right")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(Color(red: 0.95, green: 0.48, blue: 0.15))
+                    .foregroundStyle(palette.accent)
                     .frame(width: 42, height: 42)
-                    .background(Color(red: 1.00, green: 0.95, blue: 0.87), in: Circle())
+                    .background(palette.accentSoft, in: Circle())
             }
 
             HStack(spacing: 10) {
                 routeBadge(style.mood, systemImage: style.symbol, tint: style.gradient.first ?? .orange)
-                routeBadge("\(route.stages.count) stages", systemImage: "point.topleft.down.curvedto.point.bottomright.up", tint: Color(red: 0.56, green: 0.79, blue: 0.41))
+                routeBadge("\(route.stages.count) \(strings.layersValue.lowercased())", systemImage: "point.topleft.down.curvedto.point.bottomright.up", tint: Color(red: 0.56, green: 0.79, blue: 0.41))
 
                 Spacer()
 
                 Text(style.miniLabel)
                     .font(.system(size: 11, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.black.opacity(0.6))
+                    .foregroundStyle(palette.textSecondary)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 8)
-                    .background(Color.black.opacity(0.05), in: Capsule())
+                    .background(palette.surfaceMuted, in: Capsule())
             }
         }
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .fill(Color.white)
+                .fill(palette.surface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 30, style: .continuous)
-                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                        .stroke(palette.border, lineWidth: 1)
                 )
         )
-        .shadow(color: Color.black.opacity(0.06), radius: 16, y: 8)
+        .shadow(color: palette.shadow, radius: 16, y: 8)
         .matchedTransitionSource(id: route.id, in: heroNamespace)
     }
 
     private func routeBadge(_ text: String, systemImage: String, tint: Color) -> some View {
         Label(text, systemImage: systemImage)
             .font(.system(size: 12, weight: .semibold, design: .rounded))
-            .foregroundStyle(Color(red: 0.08, green: 0.11, blue: 0.16))
+            .foregroundStyle(palette.textPrimary)
             .lineLimit(1)
             .padding(.horizontal, 10)
             .padding(.vertical, 8)

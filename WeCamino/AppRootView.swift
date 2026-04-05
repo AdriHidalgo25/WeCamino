@@ -5,15 +5,19 @@ struct AppRootView: View {
 
     @Namespace private var heroNamespace
     @State private var router: AppRouter
+    @State private var preferences: AppPreferencesStore
 
     init(dependencies: AppDependencies) {
         self.dependencies = dependencies
         _router = State(initialValue: AppRouter())
+        _preferences = State(initialValue: dependencies.preferencesStore)
     }
 
     var body: some View {
         let appRouter = router
+        let appPreferences = preferences
         @Bindable var bindableRouter = appRouter
+        let strings = appPreferences.strings
 
         NavigationStack(path: $bindableRouter.path) {
             AppShellView(
@@ -37,14 +41,24 @@ struct AppRootView: View {
                 }
             }
         }
+        .environment(appPreferences)
+        .environment(\.appStrings, strings)
+        .environment(\.locale, appPreferences.locale)
+        .preferredColorScheme(appPreferences.colorScheme)
     }
 }
 
 private struct AppShellView: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     let dependencies: AppDependencies
     let heroNamespace: Namespace.ID
 
     @Bindable var router: AppRouter
+
+    private var palette: AppPalette {
+        AppPalette.make(for: colorScheme)
+    }
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -78,9 +92,9 @@ private struct AppShellView: View {
     private var shellBackground: some View {
         LinearGradient(
             colors: [
-                Color(red: 0.98, green: 0.98, blue: 0.97),
-                Color(red: 0.93, green: 0.96, blue: 1.00),
-                Color(red: 0.97, green: 0.95, blue: 0.91)
+                palette.backgroundTop,
+                palette.backgroundMiddle,
+                palette.backgroundBottom
             ],
             startPoint: .top,
             endPoint: .bottom
@@ -90,61 +104,112 @@ private struct AppShellView: View {
 }
 
 private struct AppTabBar: View {
+    @Environment(\.appStrings) private var strings
+    @Environment(\.colorScheme) private var colorScheme
+
     @Binding var selectedTab: AppTab
 
+    private var palette: AppPalette {
+        AppPalette.make(for: colorScheme)
+    }
+
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 12) {
             ForEach(AppTab.allCases, id: \.self) { tab in
+                let isSelected = selectedTab == tab
+
                 Button {
                     withAnimation(.snappy(duration: 0.35, extraBounce: 0.02)) {
                         selectedTab = tab
                     }
                 } label: {
-                    VStack(spacing: 6) {
-                        Image(systemName: tab.iconName)
-                            .font(.system(size: 18, weight: .semibold))
+                    let accent = tab.accentColor
 
-                        Text(tab.title)
-                            .font(.system(size: 11, weight: .semibold, design: .rounded))
+                    HStack(spacing: 10) {
+                        Image(systemName: tab.iconName)
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundStyle(isSelected ? Color.white : palette.textSecondary)
+                            .frame(width: 34, height: 34)
+                            .background(
+                                Circle()
+                                    .fill(isSelected ? accent : palette.surfaceMuted)
+                            )
+
+                        if isSelected {
+                            Text(tab.title(strings: strings))
+                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                .foregroundStyle(palette.textPrimary)
+                                .lineLimit(1)
+                                .fixedSize(horizontal: true, vertical: false)
+                                .transition(.opacity.combined(with: .move(edge: .trailing)))
+                        }
                     }
-                    .foregroundStyle(selectedTab == tab ? Color.black : Color.black.opacity(0.44))
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, alignment: isSelected ? .leading : .center)
+                    .padding(.horizontal, isSelected ? 14 : 0)
                     .padding(.vertical, 10)
                     .background(
-                        Group {
-                            if selectedTab == tab {
-                                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                    .fill(Color(red: 0.97, green: 0.99, blue: 1.00))
-                            }
-                        }
+                        RoundedRectangle(cornerRadius: 22, style: .continuous)
+                            .fill(isSelected ? palette.surface : Color.clear)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                    .stroke(isSelected ? palette.border : Color.clear, lineWidth: 1)
+                            )
                     )
+                    .shadow(color: isSelected ? palette.shadow.opacity(0.55) : .clear, radius: 10, y: 4)
                 }
+                .frame(width: isSelected ? nil : 56)
+                .frame(maxWidth: isSelected ? .infinity : nil)
+                .layoutPriority(isSelected ? 1 : 0)
                 .buttonStyle(.plain)
             }
         }
         .padding(.horizontal, 12)
-        .padding(.vertical, 12)
+        .padding(.vertical, 14)
         .background(
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(.ultraThinMaterial)
+            RoundedRectangle(cornerRadius: 30, style: .continuous)
+                .fill(tabBarBackground)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .stroke(Color.white.opacity(0.82), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 30, style: .continuous)
+                        .stroke(palette.tabBarStroke, lineWidth: 1)
                 )
         )
-        .shadow(color: Color.black.opacity(0.10), radius: 18, y: 8)
+        .shadow(color: palette.shadow.opacity(0.85), radius: 22, y: 10)
+    }
+
+    private var tabBarBackground: some ShapeStyle {
+        colorScheme == .dark
+            ? AnyShapeStyle(
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.10, green: 0.12, blue: 0.16).opacity(0.94),
+                        Color(red: 0.13, green: 0.15, blue: 0.19).opacity(0.96)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            : AnyShapeStyle(
+                LinearGradient(
+                    colors: [
+                        Color.white.opacity(0.96),
+                        Color(red: 0.97, green: 0.98, blue: 1.00).opacity(0.98)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
     }
 }
 
 private extension AppTab {
-    var title: String {
+    func title(strings: AppStrings) -> String {
         switch self {
         case .home:
-            "Home"
+            strings.tabHome
         case .routes:
-            "Routes"
+            strings.tabRoutes
         case .settings:
-            "Settings"
+            strings.tabSettings
         }
     }
 
@@ -158,56 +223,15 @@ private extension AppTab {
             "gearshape"
         }
     }
-}
 
-private struct SettingsScene: View {
-    var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 22) {
-                Text("Settings")
-                    .font(.system(size: 34, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.10, green: 0.12, blue: 0.17))
-
-                Text("Control your Camino preferences, privacy for manual check-ins and the social experience you want to share.")
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .foregroundStyle(Color.black.opacity(0.56))
-
-                RoundedRectangle(cornerRadius: 34, style: .continuous)
-                    .fill(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 34, style: .continuous)
-                            .stroke(Color.black.opacity(0.05), lineWidth: 1)
-                    )
-                    .frame(height: 220)
-                    .overlay(alignment: .topLeading) {
-                        VStack(alignment: .leading, spacing: 18) {
-                            Label("Pilgrim profile", systemImage: "person.crop.circle.fill")
-                                .font(.system(size: 18, weight: .bold, design: .rounded))
-                                .foregroundStyle(Color(red: 0.10, green: 0.12, blue: 0.17))
-
-                            settingRow("Manual location updates", detail: "Only share your latest stop when you decide.")
-                            settingRow("Route notifications", detail: "Stay in the loop for route changes and group activity.")
-                            settingRow("Design system", detail: "New visual language applied across the app shell.")
-                        }
-                        .padding(24)
-                    }
-            }
-            .padding(.horizontal, 20)
-            .safeAreaPadding(.top, 24)
-            .safeAreaPadding(.bottom, 120)
-        }
-        .toolbar(.hidden, for: .navigationBar)
-    }
-
-    private func settingRow(_ title: String, detail: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.10, green: 0.12, blue: 0.17))
-
-            Text(detail)
-                .font(.system(size: 14, weight: .medium, design: .rounded))
-                .foregroundStyle(Color.black.opacity(0.52))
+    var accentColor: Color {
+        switch self {
+        case .home:
+            Color(red: 0.99, green: 0.63, blue: 0.24)
+        case .routes:
+            Color(red: 0.33, green: 0.66, blue: 0.96)
+        case .settings:
+            Color(red: 0.47, green: 0.73, blue: 0.45)
         }
     }
 }

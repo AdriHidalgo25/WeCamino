@@ -3,11 +3,16 @@ import Foundation
 struct AppDependencies {
     let welcomeRepository: any WelcomeRepository
     let officialRouteRepository: any OfficialRouteRepository
+    let preferencesStore: AppPreferencesStore
 }
 
 extension AppDependencies {
-    static let live = AppDependencies(
-        welcomeRepository: LocalWelcomeRepository(),
-        officialRouteRepository: LocalOfficialRouteRepository()
-    )
+    @MainActor
+    static var live: AppDependencies {
+        AppDependencies(
+            welcomeRepository: LocalWelcomeRepository(),
+            officialRouteRepository: LocalOfficialRouteRepository(),
+            preferencesStore: AppPreferencesStore()
+        )
+    }
 }

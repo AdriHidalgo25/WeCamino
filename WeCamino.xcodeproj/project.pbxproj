@@ -24,6 +24,11 @@
 		A1B2C3000000000000000064 /* RouteDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000054 /* RouteDetailViewModel.swift */; };
 		A1B2C3000000000000000065 /* RouteCatalogScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000055 /* RouteCatalogScene.swift */; };
 		A1B2C3000000000000000066 /* RouteDetailScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000056 /* RouteDetailScene.swift */; };
+		A1B2C3000000000000000081 /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000071 /* AppPreferences.swift */; };
+		A1B2C3000000000000000082 /* AppPreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000072 /* AppPreferencesStore.swift */; };
+		A1B2C3000000000000000083 /* AppStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000073 /* AppStrings.swift */; };
+		A1B2C3000000000000000084 /* AppPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000074 /* AppPalette.swift */; };
+		A1B2C3000000000000000085 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000075 /* SettingsScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +51,11 @@
 		A1B2C3000000000000000054 /* RouteDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDetailViewModel.swift; sourceTree = "<group>"; };
 		A1B2C3000000000000000055 /* RouteCatalogScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCatalogScene.swift; sourceTree = "<group>"; };
 		A1B2C3000000000000000056 /* RouteDetailScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDetailScene.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000071 /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000072 /* AppPreferencesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferencesStore.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000073 /* AppStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStrings.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000074 /* AppPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPalette.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000075 /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +105,8 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C3000000000000000016 /* AppDependencies.swift */,
+				A1B2C3000000000000000073 /* AppStrings.swift */,
+				A1B2C3000000000000000074 /* AppPalette.swift */,
 			);
 			path = Dependencies;
 			sourceTree = "<group>";
@@ -102,6 +114,7 @@
 		A1B2C3000000000000000035 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A1B2C3000000000000000071 /* AppPreferences.swift */,
 				A1B2C3000000000000000017 /* WelcomeContent.swift */,
 				A1B2C3000000000000000051 /* OfficialRoute.swift */,
 			);
@@ -111,6 +124,7 @@
 		A1B2C3000000000000000036 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
+				A1B2C3000000000000000072 /* AppPreferencesStore.swift */,
 				A1B2C3000000000000000018 /* WelcomeRepository.swift */,
 				A1B2C3000000000000000052 /* OfficialRouteRepository.swift */,
 			);
@@ -140,10 +154,19 @@
 		A1B2C3000000000000000039 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A1B2C300000000000000003C /* Settings */,
 				A1B2C300000000000000003A /* Welcome */,
 				A1B2C300000000000000003B /* Routes */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		A1B2C300000000000000003C /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3000000000000000075 /* SettingsScene.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		A1B2C300000000000000003A /* Welcome */ = {
@@ -249,6 +272,11 @@
 				A1B2C3000000000000000064 /* RouteDetailViewModel.swift in Sources */,
 				A1B2C3000000000000000065 /* RouteCatalogScene.swift in Sources */,
 				A1B2C3000000000000000066 /* RouteDetailScene.swift in Sources */,
+				A1B2C3000000000000000081 /* AppPreferences.swift in Sources */,
+				A1B2C3000000000000000082 /* AppPreferencesStore.swift in Sources */,
+				A1B2C3000000000000000083 /* AppStrings.swift in Sources */,
+				A1B2C3000000000000000084 /* AppPalette.swift in Sources */,
+				A1B2C3000000000000000085 /* SettingsScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
