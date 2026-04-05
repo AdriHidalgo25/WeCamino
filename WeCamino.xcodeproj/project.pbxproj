@@ -18,7 +18,12 @@
 		A1B2C300000000000000000A /* WelcomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001C /* WelcomeViewModel.swift */; };
 		A1B2C300000000000000000B /* WelcomeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001D /* WelcomeScene.swift */; };
 		A1B2C300000000000000000C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001E /* WelcomeView.swift */; };
-		A1B2C300000000000000000D /* HomePlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001F /* HomePlaceholderView.swift */; };
+		A1B2C3000000000000000061 /* OfficialRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000051 /* OfficialRoute.swift */; };
+		A1B2C3000000000000000062 /* OfficialRouteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000052 /* OfficialRouteRepository.swift */; };
+		A1B2C3000000000000000063 /* RouteCatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000053 /* RouteCatalogViewModel.swift */; };
+		A1B2C3000000000000000064 /* RouteDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000054 /* RouteDetailViewModel.swift */; };
+		A1B2C3000000000000000065 /* RouteCatalogScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000055 /* RouteCatalogScene.swift */; };
+		A1B2C3000000000000000066 /* RouteDetailScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000056 /* RouteDetailScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +40,12 @@
 		A1B2C300000000000000001C /* WelcomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewModel.swift; sourceTree = "<group>"; };
 		A1B2C300000000000000001D /* WelcomeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScene.swift; sourceTree = "<group>"; };
 		A1B2C300000000000000001E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
-		A1B2C300000000000000001F /* HomePlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePlaceholderView.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000051 /* OfficialRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficialRoute.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000052 /* OfficialRouteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficialRouteRepository.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000053 /* RouteCatalogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCatalogViewModel.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000054 /* RouteDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDetailViewModel.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000055 /* RouteCatalogScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCatalogScene.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000056 /* RouteDetailScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDetailScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C3000000000000000017 /* WelcomeContent.swift */,
+				A1B2C3000000000000000051 /* OfficialRoute.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -101,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C3000000000000000018 /* WelcomeRepository.swift */,
+				A1B2C3000000000000000052 /* OfficialRouteRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -119,6 +131,8 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C300000000000000001C /* WelcomeViewModel.swift */,
+				A1B2C3000000000000000053 /* RouteCatalogViewModel.swift */,
+				A1B2C3000000000000000054 /* RouteDetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -127,7 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C300000000000000003A /* Welcome */,
-				A1B2C300000000000000003B /* Home */,
+				A1B2C300000000000000003B /* Routes */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -141,12 +155,13 @@
 			path = Welcome;
 			sourceTree = "<group>";
 		};
-		A1B2C300000000000000003B /* Home */ = {
+		A1B2C300000000000000003B /* Routes */ = {
 			isa = PBXGroup;
 			children = (
-				A1B2C300000000000000001F /* HomePlaceholderView.swift */,
+				A1B2C3000000000000000055 /* RouteCatalogScene.swift */,
+				A1B2C3000000000000000056 /* RouteDetailScene.swift */,
 			);
-			path = Home;
+			path = Routes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,7 +243,12 @@
 				A1B2C300000000000000000A /* WelcomeViewModel.swift in Sources */,
 				A1B2C300000000000000000B /* WelcomeScene.swift in Sources */,
 				A1B2C300000000000000000C /* WelcomeView.swift in Sources */,
-				A1B2C300000000000000000D /* HomePlaceholderView.swift in Sources */,
+				A1B2C3000000000000000061 /* OfficialRoute.swift in Sources */,
+				A1B2C3000000000000000062 /* OfficialRouteRepository.swift in Sources */,
+				A1B2C3000000000000000063 /* RouteCatalogViewModel.swift in Sources */,
+				A1B2C3000000000000000064 /* RouteDetailViewModel.swift in Sources */,
+				A1B2C3000000000000000065 /* RouteCatalogScene.swift in Sources */,
+				A1B2C3000000000000000066 /* RouteDetailScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

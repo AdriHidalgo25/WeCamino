@@ -6,8 +6,9 @@ import Observation
 final class AppRouter: WelcomeRouting {
     var path: [AppDestination] = []
 
-    func showHome() {
-        path.append(.home)
+    func showRouteCatalog() {
+        guard path.last != .routeCatalog else { return }
+        path.append(.routeCatalog)
     }
 
     func popToRoot() {

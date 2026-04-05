@@ -23,8 +23,17 @@ struct AppRootView: View {
             )
             .navigationDestination(for: AppDestination.self) { destination in
                 switch destination {
-                case .home:
-                    HomePlaceholderView(heroNamespace: heroNamespace)
+                case .routeCatalog:
+                    RouteCatalogScene(
+                        repository: dependencies.officialRouteRepository,
+                        heroNamespace: heroNamespace
+                    )
+                case .routeDetail(let routeID):
+                    RouteDetailScene(
+                        repository: dependencies.officialRouteRepository,
+                        routeID: routeID,
+                        heroNamespace: heroNamespace
+                    )
                 }
             }
         }
