@@ -1,0 +1,352 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1B2C3000000000000000001 /* WeCaminoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000011 /* WeCaminoApp.swift */; };
+		A1B2C3000000000000000003 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000015 /* AppRootView.swift */; };
+		A1B2C3000000000000000004 /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000016 /* AppDependencies.swift */; };
+		A1B2C3000000000000000005 /* WelcomeContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000017 /* WelcomeContent.swift */; };
+		A1B2C3000000000000000006 /* WelcomeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000018 /* WelcomeRepository.swift */; };
+		A1B2C3000000000000000007 /* AppDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000019 /* AppDestination.swift */; };
+		A1B2C3000000000000000008 /* WelcomeRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001A /* WelcomeRouting.swift */; };
+		A1B2C3000000000000000009 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001B /* AppRouter.swift */; };
+		A1B2C300000000000000000A /* WelcomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001C /* WelcomeViewModel.swift */; };
+		A1B2C300000000000000000B /* WelcomeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001D /* WelcomeScene.swift */; };
+		A1B2C300000000000000000C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001E /* WelcomeView.swift */; };
+		A1B2C300000000000000000D /* HomePlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001F /* HomePlaceholderView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A1B2C3000000000000000011 /* WeCaminoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeCaminoApp.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000013 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1B2C3000000000000000014 /* WeCamino.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeCamino.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1B2C3000000000000000015 /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000016 /* AppDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependencies.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000017 /* WelcomeContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeContent.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000018 /* WelcomeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeRepository.swift; sourceTree = "<group>"; };
+		A1B2C3000000000000000019 /* AppDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDestination.swift; sourceTree = "<group>"; };
+		A1B2C300000000000000001A /* WelcomeRouting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeRouting.swift; sourceTree = "<group>"; };
+		A1B2C300000000000000001B /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		A1B2C300000000000000001C /* WelcomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewModel.swift; sourceTree = "<group>"; };
+		A1B2C300000000000000001D /* WelcomeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScene.swift; sourceTree = "<group>"; };
+		A1B2C300000000000000001E /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		A1B2C300000000000000001F /* HomePlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePlaceholderView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1B2C3000000000000000021 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1B2C3000000000000000031 = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3000000000000000033 /* WeCamino */,
+				A1B2C3000000000000000032 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A1B2C3000000000000000032 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3000000000000000014 /* WeCamino.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A1B2C3000000000000000033 /* WeCamino */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3000000000000000011 /* WeCaminoApp.swift */,
+				A1B2C3000000000000000015 /* AppRootView.swift */,
+				A1B2C3000000000000000034 /* Dependencies */,
+				A1B2C3000000000000000035 /* Model */,
+				A1B2C3000000000000000036 /* Repository */,
+				A1B2C3000000000000000037 /* Navigation */,
+				A1B2C3000000000000000038 /* ViewModel */,
+				A1B2C3000000000000000039 /* View */,
+				A1B2C3000000000000000013 /* Assets.xcassets */,
+			);
+			path = WeCamino;
+			sourceTree = "<group>";
+		};
+		A1B2C3000000000000000034 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3000000000000000016 /* AppDependencies.swift */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		A1B2C3000000000000000035 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3000000000000000017 /* WelcomeContent.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		A1B2C3000000000000000036 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3000000000000000018 /* WelcomeRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		A1B2C3000000000000000037 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3000000000000000019 /* AppDestination.swift */,
+				A1B2C300000000000000001A /* WelcomeRouting.swift */,
+				A1B2C300000000000000001B /* AppRouter.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		A1B2C3000000000000000038 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C300000000000000001C /* WelcomeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		A1B2C3000000000000000039 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C300000000000000003A /* Welcome */,
+				A1B2C300000000000000003B /* Home */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A1B2C300000000000000003A /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C300000000000000001D /* WelcomeScene.swift */,
+				A1B2C300000000000000001E /* WelcomeView.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		A1B2C300000000000000003B /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C300000000000000001F /* HomePlaceholderView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1B2C3000000000000000041 /* WeCamino */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B2C3000000000000000044 /* Build configuration list for PBXNativeTarget "WeCamino" */;
+			buildPhases = (
+				A1B2C3000000000000000023 /* Sources */,
+				A1B2C3000000000000000021 /* Frameworks */,
+				A1B2C3000000000000000022 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WeCamino;
+			productName = WeCamino;
+			productReference = A1B2C3000000000000000014 /* WeCamino.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1B2C3000000000000000042 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					A1B2C3000000000000000041 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+				};
+			};
+			buildConfigurationList = A1B2C3000000000000000043 /* Build configuration list for PBXProject "WeCamino" */;
+			compatibilityVersion = "Xcode 16.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A1B2C3000000000000000031;
+			productRefGroup = A1B2C3000000000000000032 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1B2C3000000000000000041 /* WeCamino */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A1B2C3000000000000000022 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1B2C3000000000000000023 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3000000000000000001 /* WeCaminoApp.swift in Sources */,
+				A1B2C3000000000000000003 /* AppRootView.swift in Sources */,
+				A1B2C3000000000000000004 /* AppDependencies.swift in Sources */,
+				A1B2C3000000000000000005 /* WelcomeContent.swift in Sources */,
+				A1B2C3000000000000000006 /* WelcomeRepository.swift in Sources */,
+				A1B2C3000000000000000007 /* AppDestination.swift in Sources */,
+				A1B2C3000000000000000008 /* WelcomeRouting.swift in Sources */,
+				A1B2C3000000000000000009 /* AppRouter.swift in Sources */,
+				A1B2C300000000000000000A /* WelcomeViewModel.swift in Sources */,
+				A1B2C300000000000000000B /* WelcomeScene.swift in Sources */,
+				A1B2C300000000000000000C /* WelcomeView.swift in Sources */,
+				A1B2C300000000000000000D /* HomePlaceholderView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A1B2C3000000000000000045 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A1B2C3000000000000000046 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A1B2C3000000000000000047 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wecamino.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A1B2C3000000000000000048 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wecamino.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1B2C3000000000000000043 /* Build configuration list for PBXProject "WeCamino" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3000000000000000045 /* Debug */,
+				A1B2C3000000000000000046 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1B2C3000000000000000044 /* Build configuration list for PBXNativeTarget "WeCamino" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3000000000000000047 /* Debug */,
+				A1B2C3000000000000000048 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1B2C3000000000000000042 /* Project object */;
+}
