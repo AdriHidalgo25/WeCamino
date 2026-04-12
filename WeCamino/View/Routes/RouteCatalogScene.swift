@@ -1,5 +1,50 @@
 import SwiftUI
 
+private enum RouteCatalogLayout {
+    static let contentSpacing: CGFloat = 24
+    static let horizontalPadding: CGFloat = 20
+    static let topSafeAreaPadding: CGFloat = 24
+    static let bottomSafeAreaPadding: CGFloat = 112
+    static let initialHeaderOffset: CGFloat = 10
+    static let initialSummaryOffset: CGFloat = 16
+    static let initialRowsOffset: CGFloat = 22
+
+    static let summarySpacing: CGFloat = 10
+    static let summaryPillCornerRadius: CGFloat = 16
+    static let summaryPillHorizontalPadding: CGFloat = 14
+    static let summaryPillVerticalPadding: CGFloat = 10
+    static let summaryTitleSize: CGFloat = 12
+    static let summaryValueSize: CGFloat = 15
+
+    static let routeRowSpacing: CGFloat = 14
+    static let routeRowPadding: CGFloat = 14
+    static let routeRowCornerRadius: CGFloat = 20
+    static let routeRowInternalSpacing: CGFloat = 14
+    static let routeTitleSize: CGFloat = 20
+    static let routeDescriptionSize: CGFloat = 14
+    static let routeTextSpacing: CGFloat = 6
+    static let routeMetaSpacing: CGFloat = 12
+    static let routeMetaHorizontalSpacing: CGFloat = 8
+    static let routeMetaVerticalSpacing: CGFloat = 8
+
+    static let thumbnailSize: CGFloat = 106
+    static let thumbnailCornerRadius: CGFloat = 18
+    static let thumbnailOrbSize: CGFloat = 56
+    static let thumbnailOrbOffset = CGSize(width: 20, height: -22)
+    static let thumbnailSymbolSize: CGFloat = 28
+    static let thumbnailCodeFontSize: CGFloat = 10
+    static let thumbnailCodeHorizontalPadding: CGFloat = 7
+    static let thumbnailCodeVerticalPadding: CGFloat = 5
+    static let thumbnailCodePadding: CGFloat = 8
+
+    static let chipFontSize: CGFloat = 12
+    static let chipHorizontalPadding: CGFloat = 10
+    static let chipVerticalPadding: CGFloat = 6
+    static let openButtonSize: CGFloat = 32
+    static let openButtonSymbolSize: CGFloat = 14
+}
+
+/// Lists the official Camino routes with a compact, comparison-first layout.
 struct RouteCatalogScene: View {
     @Environment(\.appStrings) private var strings
     @Environment(\.colorScheme) private var colorScheme
@@ -25,27 +70,29 @@ struct RouteCatalogScene: View {
         ZStack {
             routeCatalogBackground
 
-            Group {
-                if viewModel.isLoading && viewModel.routes.isEmpty {
-                    ProgressView(strings.routesLoading)
-                        .tint(palette.textPrimary)
-                } else {
-                    ScrollView(.vertical, showsIndicators: false) {
-                        LazyVStack(alignment: .leading, spacing: 20) {
-                            routeStats
-                                .opacity(hasAnimatedIn ? 1 : 0)
-                                .offset(y: hasAnimatedIn ? 0 : 14)
-                                .animation(.smooth(duration: 0.8).delay(0.04), value: hasAnimatedIn)
+            if viewModel.isLoading && viewModel.routes.isEmpty {
+                ProgressView(strings.routesLoading)
+                    .tint(palette.textPrimary)
+            } else {
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: RouteCatalogLayout.contentSpacing) {
+                        routeHeader
+                            .opacity(hasAnimatedIn ? 1 : 0)
+                            .offset(y: hasAnimatedIn ? 0 : RouteCatalogLayout.initialHeaderOffset)
 
-                            routeList
-                                .opacity(hasAnimatedIn ? 1 : 0)
-                                .offset(y: hasAnimatedIn ? 0 : 20)
-                                .animation(.smooth(duration: 0.8).delay(0.1), value: hasAnimatedIn)
-                        }
-                        .padding(.horizontal, 20)
-                        .safeAreaPadding(.top, 24)
-                        .safeAreaPadding(.bottom, 112)
+                        routeSummary
+                            .opacity(hasAnimatedIn ? 1 : 0)
+                            .offset(y: hasAnimatedIn ? 0 : RouteCatalogLayout.initialSummaryOffset)
+                            .animation(.smooth(duration: 0.55).delay(0.04), value: hasAnimatedIn)
+
+                        routeRows
+                            .opacity(hasAnimatedIn ? 1 : 0)
+                            .offset(y: hasAnimatedIn ? 0 : RouteCatalogLayout.initialRowsOffset)
+                            .animation(.smooth(duration: 0.55).delay(0.08), value: hasAnimatedIn)
                     }
+                    .padding(.horizontal, RouteCatalogLayout.horizontalPadding)
+                    .safeAreaPadding(.top, RouteCatalogLayout.topSafeAreaPadding)
+                    .safeAreaPadding(.bottom, RouteCatalogLayout.bottomSafeAreaPadding)
                 }
             }
         }
@@ -63,146 +110,144 @@ struct RouteCatalogScene: View {
     }
 
     private var routeCatalogBackground: some View {
-        ZStack {
-            LinearGradient(
-                colors: [
-                    palette.backgroundTop,
-                    palette.backgroundMiddle,
-                    palette.backgroundBottom
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+        palette.backgroundMiddle
             .ignoresSafeArea()
-
-            Circle()
-                .fill(palette.glowPrimary)
-                .frame(width: 280, height: 280)
-                .blur(radius: 26)
-                .offset(x: 140, y: -280)
-        }
     }
 
-    private var routeStats: some View {
-        HStack(spacing: 12) {
-            statTile(title: strings.tabRoutes, value: "\(viewModel.routes.count)", tint: Color(red: 0.86, green: 0.96, blue: 0.84))
-            statTile(title: strings.sourceTitle, value: strings.sourceValue, tint: Color(red: 1.00, green: 0.94, blue: 0.84))
-            statTile(title: strings.layersTitle, value: strings.layersValue, tint: Color(red: 0.85, green: 0.93, blue: 1.00))
-        }
-    }
-
-    private var routeList: some View {
-        VStack(alignment: .leading, spacing: 16) {
+    private var routeHeader: some View {
+        VStack(alignment: .leading, spacing: 8) {
             Text(strings.routesTitle)
-                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .font(.system(size: 32, weight: .bold, design: .rounded))
                 .foregroundStyle(palette.textPrimary)
 
+            Text(strings.routesSubtitle)
+                .font(.system(size: 15, weight: .medium, design: .rounded))
+                .foregroundStyle(palette.textSecondary)
+        }
+    }
+
+    private var routeSummary: some View {
+        HStack(spacing: RouteCatalogLayout.summarySpacing) {
+            summaryPill(title: strings.tabRoutes, value: "\(viewModel.routes.count)")
+            summaryPill(title: strings.sourceTitle, value: strings.sourceValue)
+            summaryPill(title: strings.layersTitle, value: strings.layersValue)
+        }
+    }
+
+    private var routeRows: some View {
+        VStack(spacing: RouteCatalogLayout.routeRowSpacing) {
             ForEach(viewModel.routes) { route in
                 NavigationLink(value: AppDestination.routeDetail(route.id)) {
-                    routeCard(route)
+                    routeRow(route)
                 }
                 .buttonStyle(.plain)
             }
         }
     }
 
-    private func statTile(title: String, value: String, tint: Color) -> some View {
-        let titleColor = Color(red: 0.24, green: 0.28, blue: 0.34).opacity(0.78)
-        let valueColor = Color(red: 0.11, green: 0.14, blue: 0.20)
-
-        return VStack(alignment: .leading, spacing: 6) {
+    private func summaryPill(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
             Text(title)
-                .font(.system(size: 12, weight: .medium, design: .rounded))
-                .foregroundStyle(titleColor)
+                .font(.system(size: RouteCatalogLayout.summaryTitleSize, weight: .medium, design: .rounded))
+                .foregroundStyle(palette.textSecondary)
 
             Text(value)
-                .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundStyle(valueColor)
+                .font(.system(size: RouteCatalogLayout.summaryValueSize, weight: .bold, design: .rounded))
+                .foregroundStyle(palette.textPrimary)
         }
-        .padding(14)
+        .padding(.horizontal, RouteCatalogLayout.summaryPillHorizontalPadding)
+        .padding(.vertical, RouteCatalogLayout.summaryPillVerticalPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .fill(tint)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 24, style: .continuous)
-                        .stroke(Color.white.opacity(0.18), lineWidth: 1)
-                )
-        )
-    }
-
-    private func routeCard(_ route: OfficialRoute) -> some View {
-        let style = route.id.visualStyle
-
-        return VStack(alignment: .leading, spacing: 16) {
-            RouteLandscapeArt(style: style)
-                .frame(height: 160)
-
-            HStack(alignment: .top, spacing: 14) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(route.name)
-                        .font(.system(size: 23, weight: .bold, design: .rounded))
-                        .foregroundStyle(palette.textPrimary)
-
-                    Text(route.shortDescription)
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(palette.textSecondary)
-                        .lineLimit(2)
-                }
-
-                Spacer(minLength: 10)
-
-                Image(systemName: "arrow.up.right")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(palette.accent)
-                    .frame(width: 42, height: 42)
-                    .background(palette.accentSoft, in: Circle())
-            }
-
-            HStack(spacing: 10) {
-                routeBadge(style.mood, systemImage: style.symbol, tint: style.gradient.first ?? .orange)
-                routeBadge("\(route.stages.count) \(strings.layersValue.lowercased())", systemImage: "point.topleft.down.curvedto.point.bottomright.up", tint: Color(red: 0.56, green: 0.79, blue: 0.41))
-
-                Spacer()
-
-                Text(style.miniLabel)
-                    .font(.system(size: 11, weight: .bold, design: .rounded))
-                    .foregroundStyle(palette.textSecondary)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 8)
-                    .background(palette.surfaceMuted, in: Capsule())
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
+            RoundedRectangle(cornerRadius: RouteCatalogLayout.summaryPillCornerRadius, style: .continuous)
                 .fill(palette.surface)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    RoundedRectangle(cornerRadius: RouteCatalogLayout.summaryPillCornerRadius, style: .continuous)
                         .stroke(palette.border, lineWidth: 1)
                 )
         )
-        .shadow(color: palette.shadow, radius: 16, y: 8)
+    }
+
+    private func routeRow(_ route: OfficialRoute) -> some View {
+        let style = route.id.visualStyle
+        let routeName = route.localizedName(for: strings.language)
+        let routeDescription = route.localizedShortDescription(for: strings.language)
+        let routeMood = route.id.localizedMood(for: strings.language)
+
+        return HStack(alignment: .top, spacing: RouteCatalogLayout.routeRowInternalSpacing) {
+            RouteThumbnail(style: style, code: style.miniLabel)
+                .frame(width: RouteCatalogLayout.thumbnailSize, height: RouteCatalogLayout.thumbnailSize)
+
+            VStack(alignment: .leading, spacing: RouteCatalogLayout.routeMetaSpacing) {
+                VStack(alignment: .leading, spacing: RouteCatalogLayout.routeTextSpacing) {
+                    Text(routeName)
+                        .font(.system(size: RouteCatalogLayout.routeTitleSize, weight: .bold, design: .rounded))
+                        .foregroundStyle(palette.textPrimary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+
+                    Text(routeDescription)
+                        .font(.system(size: RouteCatalogLayout.routeDescriptionSize, weight: .medium, design: .rounded))
+                        .foregroundStyle(palette.textSecondary)
+                        .lineLimit(3)
+                }
+
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: RouteCatalogLayout.routeMetaHorizontalSpacing) {
+                        routeMetaChip(routeMood, systemImage: style.symbol)
+                        routeMetaChip("\(route.stages.count) \(strings.layersValue.lowercased())", systemImage: "point.topleft.down.curvedto.point.bottomright.up")
+                    }
+
+                    VStack(alignment: .leading, spacing: RouteCatalogLayout.routeMetaVerticalSpacing) {
+                        routeMetaChip(routeMood, systemImage: style.symbol)
+                        routeMetaChip("\(route.stages.count) \(strings.layersValue.lowercased())", systemImage: "point.topleft.down.curvedto.point.bottomright.up")
+                    }
+                }
+            }
+
+            Spacer(minLength: 0)
+
+            routeOpenButton
+        }
+        .padding(RouteCatalogLayout.routeRowPadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: RouteCatalogLayout.routeRowCornerRadius, style: .continuous)
+                .fill(palette.surface)
+                .overlay(
+                    RoundedRectangle(cornerRadius: RouteCatalogLayout.routeRowCornerRadius, style: .continuous)
+                        .stroke(palette.border, lineWidth: 1)
+                )
+        )
         .matchedTransitionSource(id: route.id, in: heroNamespace)
     }
 
-    private func routeBadge(_ text: String, systemImage: String, tint: Color) -> some View {
+    private func routeMetaChip(_ text: String, systemImage: String) -> some View {
         Label(text, systemImage: systemImage)
-            .font(.system(size: 12, weight: .semibold, design: .rounded))
-            .foregroundStyle(palette.textPrimary)
+            .font(.system(size: RouteCatalogLayout.chipFontSize, weight: .medium, design: .rounded))
+            .foregroundStyle(palette.textSecondary)
             .lineLimit(1)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 8)
-            .background(tint.opacity(0.18), in: Capsule())
+            .padding(.horizontal, RouteCatalogLayout.chipHorizontalPadding)
+            .padding(.vertical, RouteCatalogLayout.chipVerticalPadding)
+            .background(palette.surfaceMuted, in: Capsule())
+    }
+
+    private var routeOpenButton: some View {
+        Image(systemName: "arrow.up.right")
+            .font(.system(size: RouteCatalogLayout.openButtonSymbolSize, weight: .bold))
+            .foregroundStyle(palette.accent)
+            .frame(width: RouteCatalogLayout.openButtonSize, height: RouteCatalogLayout.openButtonSize)
+            .background(palette.accentSoft, in: Circle())
     }
 }
 
-private struct RouteLandscapeArt: View {
+private struct RouteThumbnail: View {
     let style: OfficialRouteVisualStyle
+    let code: String
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
+            RoundedRectangle(cornerRadius: RouteCatalogLayout.thumbnailCornerRadius, style: .continuous)
                 .fill(
                     LinearGradient(
                         colors: style.gradient,
@@ -211,99 +256,36 @@ private struct RouteLandscapeArt: View {
                     )
                 )
 
-            Capsule()
-                .fill(Color.white.opacity(0.88))
-                .frame(width: 76, height: 20)
-                .offset(x: 78, y: -48)
-
             Circle()
-                .fill(Color(red: 1.00, green: 0.80, blue: 0.36).opacity(0.92))
-                .frame(width: 46, height: 46)
-                .offset(x: 94, y: 26)
+                .fill(Color.white.opacity(0.16))
+                .frame(
+                    width: RouteCatalogLayout.thumbnailOrbSize,
+                    height: RouteCatalogLayout.thumbnailOrbSize
+                )
+                .offset(
+                    x: RouteCatalogLayout.thumbnailOrbOffset.width,
+                    y: RouteCatalogLayout.thumbnailOrbOffset.height
+                )
 
-            MountainShape()
-                .fill(Color.white.opacity(0.24))
-                .frame(height: 60)
-                .offset(y: 26)
-
-            PathShape()
-                .fill(Color(red: 0.97, green: 0.92, blue: 0.78))
-                .frame(width: 118, height: 50)
-                .offset(x: 22, y: 50)
-
-            HStack {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(style.mood)
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.82))
-
-                    Image(systemName: style.symbol)
-                        .font(.system(size: 28, weight: .bold))
-                        .foregroundStyle(.white)
-                }
-
-                Spacer()
-            }
-            .padding(18)
-
-            Rectangle()
-                .fill(Color(red: 0.47, green: 0.28, blue: 0.18))
-                .frame(height: 22)
-                .offset(y: 69)
+            Image(systemName: style.symbol)
+                .font(.system(size: RouteCatalogLayout.thumbnailSymbolSize, weight: .bold))
+                .foregroundStyle(.white)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .overlay(alignment: .topTrailing) {
+            Text(code)
+                .font(.system(size: RouteCatalogLayout.thumbnailCodeFontSize, weight: .bold, design: .rounded))
+                .foregroundStyle(.white.opacity(0.92))
+                .padding(.horizontal, RouteCatalogLayout.thumbnailCodeHorizontalPadding)
+                .padding(.vertical, RouteCatalogLayout.thumbnailCodeVerticalPadding)
+                .background(Color.black.opacity(0.28), in: Capsule())
+                .padding(RouteCatalogLayout.thumbnailCodePadding)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: RouteCatalogLayout.thumbnailCornerRadius, style: .continuous))
     }
 }
 
-struct RouteBackground: View {
-    let style: BackgroundStyle
-
-    enum BackgroundStyle {
-        case sunrise
-        case atlantic
-
-        var colors: [Color] {
-            switch self {
-            case .sunrise:
-                [
-                    Color(red: 0.94, green: 0.46, blue: 0.22),
-                    Color(red: 0.96, green: 0.74, blue: 0.22),
-                    Color(red: 0.15, green: 0.61, blue: 0.54)
-                ]
-            case .atlantic:
-                [
-                    Color(red: 0.04, green: 0.14, blue: 0.19),
-                    Color(red: 0.10, green: 0.35, blue: 0.53),
-                    Color(red: 0.10, green: 0.56, blue: 0.47)
-                ]
-            }
-        }
-    }
-
-    var body: some View {
-        ZStack {
-            LinearGradient(
-                colors: style.colors,
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
-
-            Circle()
-                .fill(Color.white.opacity(0.18))
-                .frame(width: 260, height: 260)
-                .blur(radius: 12)
-                .offset(x: 120, y: -250)
-
-            Circle()
-                .fill(Color.white.opacity(0.08))
-                .frame(width: 320, height: 320)
-                .blur(radius: 20)
-                .offset(x: -160, y: 260)
-        }
-    }
-}
-
+/// Centralizes the visual tokens that make a route recognizable across
+/// catalog and detail surfaces.
 struct OfficialRouteVisualStyle {
     let gradient: [Color]
     let symbol: String
@@ -312,6 +294,39 @@ struct OfficialRouteVisualStyle {
 }
 
 extension OfficialRoute.ID {
+    func localizedMood(for language: AppLanguage) -> String {
+        switch language {
+        case .spanish:
+            switch self {
+            case .frances: "Clasico"
+            case .norte: "Atlantico"
+            case .primitivo: "Origen"
+            case .ingles: "Maritimo"
+            case .portugues: "Popular"
+            case .portuguesCoastal: "Costero"
+            case .viaDeLaPlata: "Sureño"
+            case .invierno: "Alternativo"
+            case .fisterraMuxia: "Final atlantico"
+            case .arousaUlla: "Rio y mar"
+            }
+        case .french:
+            switch self {
+            case .frances: "Classique"
+            case .norte: "Atlantique"
+            case .primitivo: "Originel"
+            case .ingles: "Maritime"
+            case .portugues: "Populaire"
+            case .portuguesCoastal: "Cotier"
+            case .viaDeLaPlata: "Sud"
+            case .invierno: "Alternative"
+            case .fisterraMuxia: "Fin atlantique"
+            case .arousaUlla: "Riviere-mer"
+            }
+        case .english, .system:
+            visualStyle.mood
+        }
+    }
+
     var visualStyle: OfficialRouteVisualStyle {
         switch self {
         case .frances:
@@ -385,89 +400,5 @@ extension OfficialRoute.ID {
                 miniLabel: "AU"
             )
         }
-    }
-}
-
-private struct MountainShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: 0, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.width * 0.18, y: rect.height * 0.35))
-        path.addLine(to: CGPoint(x: rect.width * 0.32, y: rect.height * 0.55))
-        path.addLine(to: CGPoint(x: rect.width * 0.52, y: rect.height * 0.12))
-        path.addLine(to: CGPoint(x: rect.width * 0.68, y: rect.height * 0.46))
-        path.addLine(to: CGPoint(x: rect.width * 0.86, y: rect.height * 0.24))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-        path.closeSubpath()
-        return path
-    }
-}
-
-private struct PathShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.width * 0.62, y: rect.maxY))
-        path.addQuadCurve(
-            to: CGPoint(x: rect.width * 0.36, y: rect.height * 0.18),
-            control: CGPoint(x: rect.width * 0.80, y: rect.height * 0.54)
-        )
-        path.addLine(to: CGPoint(x: rect.width * 0.22, y: rect.height * 0.18))
-        path.addQuadCurve(
-            to: CGPoint(x: rect.width * 0.40, y: rect.maxY),
-            control: CGPoint(x: rect.width * 0.06, y: rect.height * 0.58)
-        )
-        path.closeSubpath()
-        return path
-    }
-}
-
-private struct PilgrimShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.addEllipse(in: CGRect(x: rect.width * 0.28, y: 0, width: rect.width * 0.28, height: rect.height * 0.22))
-        path.move(to: CGPoint(x: rect.width * 0.16, y: rect.height * 0.36))
-        path.addQuadCurve(
-            to: CGPoint(x: rect.width * 0.62, y: rect.height * 0.34),
-            control: CGPoint(x: rect.width * 0.44, y: rect.height * 0.16)
-        )
-        path.addLine(to: CGPoint(x: rect.width * 0.70, y: rect.height * 0.70))
-        path.addLine(to: CGPoint(x: rect.width * 0.54, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.width * 0.36, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.width * 0.30, y: rect.height * 0.74))
-        path.addLine(to: CGPoint(x: rect.width * 0.04, y: rect.height * 0.86))
-        path.addLine(to: CGPoint(x: 0, y: rect.height * 0.74))
-        path.addLine(to: CGPoint(x: rect.width * 0.20, y: rect.height * 0.62))
-        path.closeSubpath()
-        return path
-    }
-}
-
-private struct PilgrimAccentShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.width * 0.18, y: rect.height * 0.12))
-        path.addLine(to: CGPoint(x: rect.width * 0.82, y: 0))
-        path.addLine(to: CGPoint(x: rect.width, y: rect.height * 0.78))
-        path.addLine(to: CGPoint(x: rect.width * 0.54, y: rect.maxY))
-        path.addLine(to: CGPoint(x: 0, y: rect.height * 0.40))
-        path.closeSubpath()
-        return path
-    }
-}
-
-private struct DroneShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.midX - 14, y: rect.midY))
-        path.addLine(to: CGPoint(x: rect.midX + 14, y: rect.midY))
-        path.move(to: CGPoint(x: rect.midX - 20, y: rect.midY - 8))
-        path.addLine(to: CGPoint(x: rect.width * 0.06, y: rect.height * 0.18))
-        path.move(to: CGPoint(x: rect.midX + 20, y: rect.midY - 8))
-        path.addLine(to: CGPoint(x: rect.width * 0.94, y: rect.height * 0.18))
-        path.move(to: CGPoint(x: rect.midX - 20, y: rect.midY + 8))
-        path.addLine(to: CGPoint(x: rect.width * 0.10, y: rect.height * 0.88))
-        path.move(to: CGPoint(x: rect.midX + 20, y: rect.midY + 8))
-        path.addLine(to: CGPoint(x: rect.width * 0.90, y: rect.height * 0.88))
-        return path
     }
 }

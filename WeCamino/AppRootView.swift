@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// Owns the app shell, global preferences and the main navigation stack.
 struct AppRootView: View {
     private let dependencies: AppDependencies
 
@@ -49,6 +50,11 @@ struct AppRootView: View {
 }
 
 private struct AppShellView: View {
+    private enum Layout {
+        static let tabBarHorizontalPadding: CGFloat = 18
+        static let tabBarBottomPadding: CGFloat = 9
+    }
+
     @Environment(\.colorScheme) private var colorScheme
 
     let dependencies: AppDependencies
@@ -83,27 +89,36 @@ private struct AppShellView: View {
             }
 
             AppTabBar(selectedTab: $router.selectedTab)
-                .padding(.horizontal, 18)
-                .padding(.bottom, 8)
+                .padding(.horizontal, Layout.tabBarHorizontalPadding)
+                .padding(.bottom, Layout.tabBarBottomPadding)
         }
         .ignoresSafeArea(edges: .bottom)
     }
 
     private var shellBackground: some View {
-        LinearGradient(
-            colors: [
-                palette.backgroundTop,
-                palette.backgroundMiddle,
-                palette.backgroundBottom
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
+        palette.backgroundMiddle
         .ignoresSafeArea()
     }
 }
 
 private struct AppTabBar: View {
+    private enum Layout {
+        static let stackSpacing: CGFloat = 6
+        static let contentSpacing: CGFloat = 8
+        static let iconSize: CGFloat = 15
+        static let iconFrame: CGFloat = 20
+        static let selectedHorizontalPadding: CGFloat = 12
+        static let defaultHorizontalPadding: CGFloat = 10
+        static let verticalPadding: CGFloat = 9
+        static let barHorizontalPadding: CGFloat = 8
+        static let barVerticalPadding: CGFloat = 8
+        static let compactTabWidth: CGFloat = 64
+        static let shadowRadius: CGFloat = 8
+        static let shadowYOffset: CGFloat = 2
+        static let shadowOpacity: CGFloat = 0.22
+        static let titleFontSize: CGFloat = 13
+    }
+
     @Environment(\.appStrings) private var strings
     @Environment(\.colorScheme) private var colorScheme
 
@@ -114,7 +129,7 @@ private struct AppTabBar: View {
     }
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: Layout.stackSpacing) {
             ForEach(AppTab.allCases, id: \.self) { tab in
                 let isSelected = selectedTab == tab
 
@@ -125,19 +140,15 @@ private struct AppTabBar: View {
                 } label: {
                     let accent = tab.accentColor
 
-                    HStack(spacing: 10) {
+                    HStack(spacing: Layout.contentSpacing) {
                         Image(systemName: tab.iconName)
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundStyle(isSelected ? Color.white : palette.textSecondary)
-                            .frame(width: 34, height: 34)
-                            .background(
-                                Circle()
-                                    .fill(isSelected ? accent : palette.surfaceMuted)
-                            )
+                            .font(.system(size: Layout.iconSize, weight: .medium))
+                            .foregroundStyle(isSelected ? accent : palette.textSecondary)
+                            .frame(width: Layout.iconFrame, height: Layout.iconFrame)
 
                         if isSelected {
                             Text(tab.title(strings: strings))
-                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                .font(.system(size: Layout.titleFontSize, weight: .semibold, design: .rounded))
                                 .foregroundStyle(palette.textPrimary)
                                 .lineLimit(1)
                                 .fixedSize(horizontal: true, vertical: false)
@@ -145,59 +156,38 @@ private struct AppTabBar: View {
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: isSelected ? .leading : .center)
-                    .padding(.horizontal, isSelected ? 14 : 0)
-                    .padding(.vertical, 10)
+                    .padding(.horizontal, isSelected ? Layout.selectedHorizontalPadding : Layout.defaultHorizontalPadding)
+                    .padding(.vertical, Layout.verticalPadding)
                     .background(
-                        RoundedRectangle(cornerRadius: 22, style: .continuous)
-                            .fill(isSelected ? palette.surface : Color.clear)
+                        Capsule(style: .continuous)
+                            .fill(isSelected ? palette.selectedTabFill : Color.clear)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                Capsule(style: .continuous)
                                     .stroke(isSelected ? palette.border : Color.clear, lineWidth: 1)
                             )
                     )
-                    .shadow(color: isSelected ? palette.shadow.opacity(0.55) : .clear, radius: 10, y: 4)
                 }
-                .frame(width: isSelected ? nil : 56)
+                .frame(width: isSelected ? nil : Layout.compactTabWidth)
                 .frame(maxWidth: isSelected ? .infinity : nil)
                 .layoutPriority(isSelected ? 1 : 0)
                 .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 14)
+        .padding(.horizontal, Layout.barHorizontalPadding)
+        .padding(.vertical, Layout.barVerticalPadding)
         .background(
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .fill(tabBarBackground)
+            Capsule(style: .continuous)
+                .fill(palette.surface)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    Capsule(style: .continuous)
                         .stroke(palette.tabBarStroke, lineWidth: 1)
                 )
         )
-        .shadow(color: palette.shadow.opacity(0.85), radius: 22, y: 10)
-    }
-
-    private var tabBarBackground: some ShapeStyle {
-        colorScheme == .dark
-            ? AnyShapeStyle(
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.10, green: 0.12, blue: 0.16).opacity(0.94),
-                        Color(red: 0.13, green: 0.15, blue: 0.19).opacity(0.96)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
-            : AnyShapeStyle(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(0.96),
-                        Color(red: 0.97, green: 0.98, blue: 1.00).opacity(0.98)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-            )
+        .shadow(
+            color: palette.shadow.opacity(Layout.shadowOpacity),
+            radius: Layout.shadowRadius,
+            y: Layout.shadowYOffset
+        )
     }
 }
 

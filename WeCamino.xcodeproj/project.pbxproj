@@ -18,6 +18,7 @@
 		A1B2C300000000000000000A /* WelcomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001C /* WelcomeViewModel.swift */; };
 		A1B2C300000000000000000B /* WelcomeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001D /* WelcomeScene.swift */; };
 		A1B2C300000000000000000C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C300000000000000001E /* WelcomeView.swift */; };
+		A1B2C300000000000000000D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000013 /* Assets.xcassets */; };
 		A1B2C3000000000000000061 /* OfficialRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000051 /* OfficialRoute.swift */; };
 		A1B2C3000000000000000062 /* OfficialRouteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000052 /* OfficialRouteRepository.swift */; };
 		A1B2C3000000000000000063 /* RouteCatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000053 /* RouteCatalogViewModel.swift */; };
@@ -245,6 +246,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1B2C300000000000000000D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

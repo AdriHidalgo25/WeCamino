@@ -26,6 +26,7 @@ struct AppStrings {
 
     let routesLoading: String
     let routesTitle: String
+    let routesSubtitle: String
     let sourceTitle: String
     let sourceValue: String
     let layersTitle: String
@@ -37,9 +38,6 @@ struct AppStrings {
     let originTitle: String
     let routeCharacterTitle: String
     let whyItMattersTitle: String
-    let highlightsTitle: String
-    let spotsSuffix: String
-    let highlightsLoading: String
     let routeMapTitle: String
     let stopsLabel: String
     let routeMapUnavailableTitle: String
@@ -129,6 +127,7 @@ extension AppStrings {
         featuredNorteSubtitle: "Atlantic energy and rugged coastline.",
         routesLoading: "Loading routes",
         routesTitle: "Browse routes",
+        routesSubtitle: "Compare official Camino routes and open each one with a cleaner, more editorial view.",
         sourceTitle: "Source",
         sourceValue: "Official",
         layersTitle: "Layers",
@@ -139,9 +138,6 @@ extension AppStrings {
         originTitle: "Origin",
         routeCharacterTitle: "Route character",
         whyItMattersTitle: "Why it matters",
-        highlightsTitle: "Real highlights",
-        spotsSuffix: "spots",
-        highlightsLoading: "Loading imagery",
         routeMapTitle: "Route map",
         stopsLabel: "stops",
         routeMapUnavailableTitle: "Map unavailable",
@@ -193,6 +189,7 @@ extension AppStrings {
         featuredNorteSubtitle: "Energía atlántica y costa salvaje.",
         routesLoading: "Cargando rutas",
         routesTitle: "Explorar rutas",
+        routesSubtitle: "Compara las rutas oficiales del Camino y entra en cada una con una vista más clara y editorial.",
         sourceTitle: "Fuente",
         sourceValue: "Oficial",
         layersTitle: "Capas",
@@ -203,9 +200,6 @@ extension AppStrings {
         originTitle: "Origen",
         routeCharacterTitle: "Carácter de la ruta",
         whyItMattersTitle: "Por qué importa",
-        highlightsTitle: "Lugares reales",
-        spotsSuffix: "paradas",
-        highlightsLoading: "Cargando imágenes",
         routeMapTitle: "Mapa de la ruta",
         stopsLabel: "paradas",
         routeMapUnavailableTitle: "Mapa no disponible",
@@ -257,6 +251,7 @@ extension AppStrings {
         featuredNorteSubtitle: "Énergie atlantique et côte sauvage.",
         routesLoading: "Chargement des routes",
         routesTitle: "Explorer les routes",
+        routesSubtitle: "Comparez les routes officielles du Camino et ouvrez chacune avec une vue plus claire et éditoriale.",
         sourceTitle: "Source",
         sourceValue: "Officielle",
         layersTitle: "Couches",
@@ -267,9 +262,6 @@ extension AppStrings {
         originTitle: "Origine",
         routeCharacterTitle: "Caractère de la route",
         whyItMattersTitle: "Pourquoi c'est important",
-        highlightsTitle: "Lieux réels",
-        spotsSuffix: "arrêts",
-        highlightsLoading: "Chargement des images",
         routeMapTitle: "Carte de la route",
         stopsLabel: "arrêts",
         routeMapUnavailableTitle: "Carte indisponible",

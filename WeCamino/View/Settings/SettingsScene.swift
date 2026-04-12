@@ -200,7 +200,6 @@ struct SettingsScene: View {
                         .stroke(palette.border, lineWidth: 1)
                 )
         )
-        .shadow(color: palette.shadow, radius: 14, y: 8)
     }
 
     private func selectionRow(
