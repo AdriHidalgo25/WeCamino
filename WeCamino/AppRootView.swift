@@ -1,19 +1,24 @@
 import SwiftUI
 
+/// Owns the app shell, global preferences and the main navigation stack.
 struct AppRootView: View {
     private let dependencies: AppDependencies
 
     @Namespace private var heroNamespace
     @State private var router: AppRouter
+    @State private var preferences: AppPreferencesStore
 
     init(dependencies: AppDependencies) {
         self.dependencies = dependencies
         _router = State(initialValue: AppRouter())
+        _preferences = State(initialValue: dependencies.preferencesStore)
     }
 
     var body: some View {
         let appRouter = router
+        let appPreferences = preferences
         @Bindable var bindableRouter = appRouter
+        let strings = appPreferences.strings
 
         NavigationStack(path: $bindableRouter.path) {
             AppShellView(
@@ -37,14 +42,29 @@ struct AppRootView: View {
                 }
             }
         }
+        .environment(appPreferences)
+        .environment(\.appStrings, strings)
+        .environment(\.locale, appPreferences.locale)
+        .preferredColorScheme(appPreferences.colorScheme)
     }
 }
 
 private struct AppShellView: View {
+    private enum Layout {
+        static let tabBarHorizontalPadding: CGFloat = 18
+        static let tabBarBottomPadding: CGFloat = 9
+    }
+
+    @Environment(\.colorScheme) private var colorScheme
+
     let dependencies: AppDependencies
     let heroNamespace: Namespace.ID
 
     @Bindable var router: AppRouter
+
+    private var palette: AppPalette {
+        AppPalette.make(for: colorScheme)
+    }
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -69,82 +89,117 @@ private struct AppShellView: View {
             }
 
             AppTabBar(selectedTab: $router.selectedTab)
-                .padding(.horizontal, 18)
-                .padding(.bottom, 8)
+                .padding(.horizontal, Layout.tabBarHorizontalPadding)
+                .padding(.bottom, Layout.tabBarBottomPadding)
         }
         .ignoresSafeArea(edges: .bottom)
     }
 
     private var shellBackground: some View {
-        LinearGradient(
-            colors: [
-                Color(red: 0.98, green: 0.98, blue: 0.97),
-                Color(red: 0.93, green: 0.96, blue: 1.00),
-                Color(red: 0.97, green: 0.95, blue: 0.91)
-            ],
-            startPoint: .top,
-            endPoint: .bottom
-        )
+        palette.backgroundMiddle
         .ignoresSafeArea()
     }
 }
 
 private struct AppTabBar: View {
+    private enum Layout {
+        static let stackSpacing: CGFloat = 6
+        static let contentSpacing: CGFloat = 8
+        static let iconSize: CGFloat = 15
+        static let iconFrame: CGFloat = 20
+        static let selectedHorizontalPadding: CGFloat = 12
+        static let defaultHorizontalPadding: CGFloat = 10
+        static let verticalPadding: CGFloat = 9
+        static let barHorizontalPadding: CGFloat = 8
+        static let barVerticalPadding: CGFloat = 8
+        static let compactTabWidth: CGFloat = 64
+        static let shadowRadius: CGFloat = 8
+        static let shadowYOffset: CGFloat = 2
+        static let shadowOpacity: CGFloat = 0.22
+        static let titleFontSize: CGFloat = 13
+    }
+
+    @Environment(\.appStrings) private var strings
+    @Environment(\.colorScheme) private var colorScheme
+
     @Binding var selectedTab: AppTab
 
+    private var palette: AppPalette {
+        AppPalette.make(for: colorScheme)
+    }
+
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: Layout.stackSpacing) {
             ForEach(AppTab.allCases, id: \.self) { tab in
+                let isSelected = selectedTab == tab
+
                 Button {
                     withAnimation(.snappy(duration: 0.35, extraBounce: 0.02)) {
                         selectedTab = tab
                     }
                 } label: {
-                    VStack(spacing: 6) {
-                        Image(systemName: tab.iconName)
-                            .font(.system(size: 18, weight: .semibold))
+                    let accent = tab.accentColor
 
-                        Text(tab.title)
-                            .font(.system(size: 11, weight: .semibold, design: .rounded))
-                    }
-                    .foregroundStyle(selectedTab == tab ? Color.black : Color.black.opacity(0.44))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(
-                        Group {
-                            if selectedTab == tab {
-                                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                    .fill(Color(red: 0.97, green: 0.99, blue: 1.00))
-                            }
+                    HStack(spacing: Layout.contentSpacing) {
+                        Image(systemName: tab.iconName)
+                            .font(.system(size: Layout.iconSize, weight: .medium))
+                            .foregroundStyle(isSelected ? accent : palette.textSecondary)
+                            .frame(width: Layout.iconFrame, height: Layout.iconFrame)
+
+                        if isSelected {
+                            Text(tab.title(strings: strings))
+                                .font(.system(size: Layout.titleFontSize, weight: .semibold, design: .rounded))
+                                .foregroundStyle(palette.textPrimary)
+                                .lineLimit(1)
+                                .fixedSize(horizontal: true, vertical: false)
+                                .transition(.opacity.combined(with: .move(edge: .trailing)))
                         }
+                    }
+                    .frame(maxWidth: .infinity, alignment: isSelected ? .leading : .center)
+                    .padding(.horizontal, isSelected ? Layout.selectedHorizontalPadding : Layout.defaultHorizontalPadding)
+                    .padding(.vertical, Layout.verticalPadding)
+                    .background(
+                        Capsule(style: .continuous)
+                            .fill(isSelected ? palette.selectedTabFill : Color.clear)
+                            .overlay(
+                                Capsule(style: .continuous)
+                                    .stroke(isSelected ? palette.border : Color.clear, lineWidth: 1)
+                            )
                     )
                 }
+                .frame(width: isSelected ? nil : Layout.compactTabWidth)
+                .frame(maxWidth: isSelected ? .infinity : nil)
+                .layoutPriority(isSelected ? 1 : 0)
                 .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 12)
+        .padding(.horizontal, Layout.barHorizontalPadding)
+        .padding(.vertical, Layout.barVerticalPadding)
         .background(
-            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(.ultraThinMaterial)
+            Capsule(style: .continuous)
+                .fill(palette.surface)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .stroke(Color.white.opacity(0.82), lineWidth: 1)
+                    Capsule(style: .continuous)
+                        .stroke(palette.tabBarStroke, lineWidth: 1)
                 )
         )
-        .shadow(color: Color.black.opacity(0.10), radius: 18, y: 8)
+        .shadow(
+            color: palette.shadow.opacity(Layout.shadowOpacity),
+            radius: Layout.shadowRadius,
+            y: Layout.shadowYOffset
+        )
     }
 }
 
 private extension AppTab {
-    var title: String {
+    func title(strings: AppStrings) -> String {
         switch self {
         case .home:
-            "Home"
+            strings.tabHome
         case .routes:
-            "Routes"
+            strings.tabRoutes
         case .settings:
-            "Settings"
+            strings.tabSettings
         }
     }
 
@@ -158,56 +213,15 @@ private extension AppTab {
             "gearshape"
         }
     }
-}
 
-private struct SettingsScene: View {
-    var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 22) {
-                Text("Settings")
-                    .font(.system(size: 34, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(red: 0.10, green: 0.12, blue: 0.17))
-
-                Text("Control your Camino preferences, privacy for manual check-ins and the social experience you want to share.")
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .foregroundStyle(Color.black.opacity(0.56))
-
-                RoundedRectangle(cornerRadius: 34, style: .continuous)
-                    .fill(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 34, style: .continuous)
-                            .stroke(Color.black.opacity(0.05), lineWidth: 1)
-                    )
-                    .frame(height: 220)
-                    .overlay(alignment: .topLeading) {
-                        VStack(alignment: .leading, spacing: 18) {
-                            Label("Pilgrim profile", systemImage: "person.crop.circle.fill")
-                                .font(.system(size: 18, weight: .bold, design: .rounded))
-                                .foregroundStyle(Color(red: 0.10, green: 0.12, blue: 0.17))
-
-                            settingRow("Manual location updates", detail: "Only share your latest stop when you decide.")
-                            settingRow("Route notifications", detail: "Stay in the loop for route changes and group activity.")
-                            settingRow("Design system", detail: "New visual language applied across the app shell.")
-                        }
-                        .padding(24)
-                    }
-            }
-            .padding(.horizontal, 20)
-            .safeAreaPadding(.top, 24)
-            .safeAreaPadding(.bottom, 120)
-        }
-        .toolbar(.hidden, for: .navigationBar)
-    }
-
-    private func settingRow(_ title: String, detail: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(red: 0.10, green: 0.12, blue: 0.17))
-
-            Text(detail)
-                .font(.system(size: 14, weight: .medium, design: .rounded))
-                .foregroundStyle(Color.black.opacity(0.52))
+    var accentColor: Color {
+        switch self {
+        case .home:
+            Color(red: 0.99, green: 0.63, blue: 0.24)
+        case .routes:
+            Color(red: 0.33, green: 0.66, blue: 0.96)
+        case .settings:
+            Color(red: 0.47, green: 0.73, blue: 0.45)
         }
     }
 }
