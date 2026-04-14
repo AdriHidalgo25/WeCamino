@@ -30,6 +30,14 @@
 		A1B2C3000000000000000083 /* AppStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000073 /* AppStrings.swift */; };
 		A1B2C3000000000000000084 /* AppPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000074 /* AppPalette.swift */; };
 		A1B2C3000000000000000085 /* SettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3000000000000000075 /* SettingsScene.swift */; };
+		A1B2C3000000000000000091 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A1 /* UserProfile.swift */; };
+		A1B2C3000000000000000092 /* UserProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A2 /* UserProfileRepository.swift */; };
+		A1B2C3000000000000000093 /* ProfileRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A3 /* ProfileRouting.swift */; };
+		A1B2C3000000000000000094 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A4 /* ProfileViewModel.swift */; };
+		A1B2C3000000000000000095 /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A5 /* EditProfileViewModel.swift */; };
+		A1B2C3000000000000000096 /* ProfileScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A6 /* ProfileScene.swift */; };
+		A1B2C3000000000000000097 /* EditProfileScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A7 /* EditProfileScene.swift */; };
+		A1B2C3000000000000000098 /* ProfileAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A9 /* ProfileAvatarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +65,14 @@
 		A1B2C3000000000000000073 /* AppStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStrings.swift; sourceTree = "<group>"; };
 		A1B2C3000000000000000074 /* AppPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPalette.swift; sourceTree = "<group>"; };
 		A1B2C3000000000000000075 /* SettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScene.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000A1 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000A2 /* UserProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileRepository.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000A3 /* ProfileRouting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRouting.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000A4 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000A5 /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000A6 /* ProfileScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScene.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000A7 /* EditProfileScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileScene.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000A9 /* ProfileAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAvatarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +134,7 @@
 				A1B2C3000000000000000071 /* AppPreferences.swift */,
 				A1B2C3000000000000000017 /* WelcomeContent.swift */,
 				A1B2C3000000000000000051 /* OfficialRoute.swift */,
+				A1B2C30000000000000000A1 /* UserProfile.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -128,6 +145,7 @@
 				A1B2C3000000000000000072 /* AppPreferencesStore.swift */,
 				A1B2C3000000000000000018 /* WelcomeRepository.swift */,
 				A1B2C3000000000000000052 /* OfficialRouteRepository.swift */,
+				A1B2C30000000000000000A2 /* UserProfileRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -137,6 +155,7 @@
 			children = (
 				A1B2C3000000000000000019 /* AppDestination.swift */,
 				A1B2C300000000000000001A /* WelcomeRouting.swift */,
+				A1B2C30000000000000000A3 /* ProfileRouting.swift */,
 				A1B2C300000000000000001B /* AppRouter.swift */,
 			);
 			path = Navigation;
@@ -148,6 +167,8 @@
 				A1B2C300000000000000001C /* WelcomeViewModel.swift */,
 				A1B2C3000000000000000053 /* RouteCatalogViewModel.swift */,
 				A1B2C3000000000000000054 /* RouteDetailViewModel.swift */,
+				A1B2C30000000000000000A4 /* ProfileViewModel.swift */,
+				A1B2C30000000000000000A5 /* EditProfileViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -158,8 +179,19 @@
 				A1B2C300000000000000003C /* Settings */,
 				A1B2C300000000000000003A /* Welcome */,
 				A1B2C300000000000000003B /* Routes */,
+				A1B2C30000000000000000A8 /* Profile */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		A1B2C30000000000000000A8 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C30000000000000000A6 /* ProfileScene.swift */,
+				A1B2C30000000000000000A7 /* EditProfileScene.swift */,
+				A1B2C30000000000000000A9 /* ProfileAvatarView.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		A1B2C300000000000000003C /* Settings */ = {
@@ -279,6 +311,14 @@
 				A1B2C3000000000000000083 /* AppStrings.swift in Sources */,
 				A1B2C3000000000000000084 /* AppPalette.swift in Sources */,
 				A1B2C3000000000000000085 /* SettingsScene.swift in Sources */,
+				A1B2C3000000000000000091 /* UserProfile.swift in Sources */,
+				A1B2C3000000000000000092 /* UserProfileRepository.swift in Sources */,
+				A1B2C3000000000000000093 /* ProfileRouting.swift in Sources */,
+				A1B2C3000000000000000094 /* ProfileViewModel.swift in Sources */,
+				A1B2C3000000000000000095 /* EditProfileViewModel.swift in Sources */,
+				A1B2C3000000000000000096 /* ProfileScene.swift in Sources */,
+				A1B2C3000000000000000097 /* EditProfileScene.swift in Sources */,
+				A1B2C3000000000000000098 /* ProfileAvatarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

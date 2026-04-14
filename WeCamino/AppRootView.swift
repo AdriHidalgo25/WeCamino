@@ -39,6 +39,11 @@ struct AppRootView: View {
                         routeID: routeID,
                         heroNamespace: heroNamespace
                     )
+                case .profileEdit:
+                    EditProfileScene(
+                        profileRepository: dependencies.userProfileRepository,
+                        routeRepository: dependencies.officialRouteRepository
+                    )
                 }
             }
         }
@@ -82,6 +87,12 @@ private struct AppShellView: View {
                     RouteCatalogScene(
                         repository: dependencies.officialRouteRepository,
                         heroNamespace: heroNamespace
+                    )
+                case .profile:
+                    ProfileScene(
+                        profileRepository: dependencies.userProfileRepository,
+                        routeRepository: dependencies.officialRouteRepository,
+                        navigator: router
                     )
                 case .settings:
                     SettingsScene()
@@ -198,6 +209,8 @@ private extension AppTab {
             strings.tabHome
         case .routes:
             strings.tabRoutes
+        case .profile:
+            strings.tabProfile
         case .settings:
             strings.tabSettings
         }
@@ -209,6 +222,8 @@ private extension AppTab {
             "house.fill"
         case .routes:
             "map"
+        case .profile:
+            "person.crop.circle"
         case .settings:
             "gearshape"
         }
@@ -220,8 +235,10 @@ private extension AppTab {
             Color(red: 0.99, green: 0.63, blue: 0.24)
         case .routes:
             Color(red: 0.33, green: 0.66, blue: 0.96)
-        case .settings:
+        case .profile:
             Color(red: 0.47, green: 0.73, blue: 0.45)
+        case .settings:
+            Color(red: 0.70, green: 0.62, blue: 0.92)
         }
     }
 }
