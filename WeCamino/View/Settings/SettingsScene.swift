@@ -1,9 +1,23 @@
 import SwiftUI
 
 struct SettingsScene: View {
+    private enum Layout {
+        static let contentSpacing: CGFloat = 22
+        static let horizontalPadding: CGFloat = 20
+        static let topPadding: CGFloat = 24
+        static let embeddedTopPadding: CGFloat = 18
+        static let bottomPadding: CGFloat = 120
+    }
+
     @Environment(AppPreferencesStore.self) private var preferences
     @Environment(\.appStrings) private var strings
     @Environment(\.colorScheme) private var colorScheme
+
+    private let isEmbeddedInNavigation: Bool
+
+    init(isEmbeddedInNavigation: Bool = false) {
+        self.isEmbeddedInNavigation = isEmbeddedInNavigation
+    }
 
     private var palette: AppPalette {
         AppPalette.make(for: colorScheme)
@@ -11,17 +25,19 @@ struct SettingsScene: View {
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 22) {
+            VStack(alignment: .leading, spacing: Layout.contentSpacing) {
                 settingsHeader
                 languageSection
                 appearanceSection
                 previewSection
             }
-            .padding(.horizontal, 20)
-            .safeAreaPadding(.top, 24)
-            .safeAreaPadding(.bottom, 120)
+            .padding(.horizontal, Layout.horizontalPadding)
+            .safeAreaPadding(.top, isEmbeddedInNavigation ? Layout.embeddedTopPadding : Layout.topPadding)
+            .safeAreaPadding(.bottom, Layout.bottomPadding)
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .navigationTitle(isEmbeddedInNavigation ? strings.settingsTitle : "")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(isEmbeddedInNavigation ? .visible : .hidden, for: .navigationBar)
     }
 
     private var settingsHeader: some View {
@@ -305,11 +321,32 @@ struct SettingsScene: View {
     private func appearanceDetail(for option: AppAppearance) -> String {
         switch option {
         case .system:
-            strings.language == .spanish ? "Respeta el modo del iPhone." : "Match the iPhone appearance."
+            switch strings.language {
+            case .spanish:
+                "Respeta el modo del iPhone."
+            case .french:
+                "Respecte l'apparence de l'iPhone."
+            case .english, .system:
+                "Match the iPhone appearance."
+            }
         case .light:
-            strings.language == .spanish ? "Mantén la app luminosa y clara." : "Keep the app bright and airy."
+            switch strings.language {
+            case .spanish:
+                "Mantén la app luminosa y clara."
+            case .french:
+                "Gardez l'app claire et lumineuse."
+            case .english, .system:
+                "Keep the app bright and airy."
+            }
         case .dark:
-            strings.language == .spanish ? "Activa una estética más nocturna." : "Switch to a darker visual mood."
+            switch strings.language {
+            case .spanish:
+                "Activa una estética más nocturna."
+            case .french:
+                "Passez à une ambiance plus sombre."
+            case .english, .system:
+                "Switch to a darker visual mood."
+            }
         }
     }
 

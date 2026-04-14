@@ -6,7 +6,7 @@ struct OfficialRoute: Identifiable, Equatable, Sendable {
         case maritime
     }
 
-    enum ID: String, CaseIterable, Hashable, Sendable {
+    enum ID: String, CaseIterable, Hashable, Codable, Sendable {
         case frances
         case norte
         case primitivo
