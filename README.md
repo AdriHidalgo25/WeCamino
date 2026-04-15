@@ -1,6 +1,38 @@
 # WeCamino
 WeCamino es una app móvil pensada para peregrinos del Camino de Santiago que quieren mantenerse conectados durante la ruta, compartir su progreso y vivir la experiencia de forma más social.
 
+## Project memory
+
+### Product direction
+
+- Red social para peregrinos del Camino de Santiago.
+- Funcionalidades actuales: bienvenida, catálogo de rutas oficiales, detalle de ruta, perfil de peregrino, ajustes, amigos, solicitudes de amistad y notificaciones internas.
+- Próxima feature: timeline social similar a Instagram, orientado a publicaciones/historias de amigos durante el Camino.
+
+### Architecture
+
+- App nativa SwiftUI con mínimo iOS 18.
+- Arquitectura MVVM orientada a SwiftUI.
+- Capas principales: `View`, `ViewModel`, `Model`, `Repository`, `Navigation` y `Dependencies`.
+- Inyección de dependencias centralizada en `AppDependencies`.
+- Repositorios locales por ahora, preparados para evolucionar hacia persistencia remota o servicios reales.
+
+### UX and visual direction
+
+- Estilo actual minimalista, sin imágenes descargadas de internet.
+- Los recursos visuales deben priorizar `SFSymbols`, gradientes ligeros, jerarquía tipográfica clara y componentes Apple-native.
+- Evitar layouts pesados o genéricos; mantener la interfaz funcional, limpia y fácil de iterar mientras crecen las features.
+- La tab bar está anclada al bottom y ocupa todo el ancho para evitar gestos accidentales del sistema.
+
+### Engineering conventions
+
+- Usar ramas `feature/<nombre-corto>` desde `develop`.
+- Mantener `develop` siempre compilable.
+- Documentar inicializadores y superficies públicas relevantes con DocC cuando aporte claridad.
+- Añadir `// MARK: -` para organizar vistas, view models, repositorios y helpers.
+- Añadir previews SwiftUI para vistas nuevas o modificadas siempre que sea razonable.
+- Evitar números mágicos cuando se repitan o expresen una decisión visual importante.
+
 ## Git workflow
 
 Este repositorio sigue una variante simple de Git Flow.
