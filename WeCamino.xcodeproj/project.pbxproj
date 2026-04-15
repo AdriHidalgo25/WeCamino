@@ -38,6 +38,14 @@
 		A1B2C3000000000000000096 /* ProfileScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A6 /* ProfileScene.swift */; };
 		A1B2C3000000000000000097 /* EditProfileScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A7 /* EditProfileScene.swift */; };
 		A1B2C3000000000000000098 /* ProfileAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000A9 /* ProfileAvatarView.swift */; };
+		A1B2C30000000000000000B1 /* FriendRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000C1 /* FriendRelationship.swift */; };
+		A1B2C30000000000000000B2 /* FriendsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000C2 /* FriendsRepository.swift */; };
+		A1B2C30000000000000000B3 /* FriendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000C3 /* FriendsViewModel.swift */; };
+		A1B2C30000000000000000B4 /* FriendsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000C4 /* FriendsScene.swift */; };
+		A1B2C30000000000000000B5 /* AppNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000C6 /* AppNotification.swift */; };
+		A1B2C30000000000000000B6 /* AppNotificationsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000C7 /* AppNotificationsStore.swift */; };
+		A1B2C30000000000000000B7 /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000C8 /* NotificationsViewModel.swift */; };
+		A1B2C30000000000000000B8 /* NotificationsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C30000000000000000C9 /* NotificationsScene.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +81,14 @@
 		A1B2C30000000000000000A6 /* ProfileScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScene.swift; sourceTree = "<group>"; };
 		A1B2C30000000000000000A7 /* EditProfileScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileScene.swift; sourceTree = "<group>"; };
 		A1B2C30000000000000000A9 /* ProfileAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAvatarView.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000C1 /* FriendRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRelationship.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000C2 /* FriendsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsRepository.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000C3 /* FriendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewModel.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000C4 /* FriendsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsScene.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000C6 /* AppNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotification.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000C7 /* AppNotificationsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotificationsStore.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000C8 /* NotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewModel.swift; sourceTree = "<group>"; };
+		A1B2C30000000000000000C9 /* NotificationsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsScene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,8 +149,10 @@
 			children = (
 				A1B2C3000000000000000071 /* AppPreferences.swift */,
 				A1B2C3000000000000000017 /* WelcomeContent.swift */,
+				A1B2C30000000000000000C6 /* AppNotification.swift */,
 				A1B2C3000000000000000051 /* OfficialRoute.swift */,
 				A1B2C30000000000000000A1 /* UserProfile.swift */,
+				A1B2C30000000000000000C1 /* FriendRelationship.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -143,9 +161,11 @@
 			isa = PBXGroup;
 			children = (
 				A1B2C3000000000000000072 /* AppPreferencesStore.swift */,
+				A1B2C30000000000000000C7 /* AppNotificationsStore.swift */,
 				A1B2C3000000000000000018 /* WelcomeRepository.swift */,
 				A1B2C3000000000000000052 /* OfficialRouteRepository.swift */,
 				A1B2C30000000000000000A2 /* UserProfileRepository.swift */,
+				A1B2C30000000000000000C2 /* FriendsRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -169,6 +189,8 @@
 				A1B2C3000000000000000054 /* RouteDetailViewModel.swift */,
 				A1B2C30000000000000000A4 /* ProfileViewModel.swift */,
 				A1B2C30000000000000000A5 /* EditProfileViewModel.swift */,
+				A1B2C30000000000000000C3 /* FriendsViewModel.swift */,
+				A1B2C30000000000000000C8 /* NotificationsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -179,9 +201,27 @@
 				A1B2C300000000000000003C /* Settings */,
 				A1B2C300000000000000003A /* Welcome */,
 				A1B2C300000000000000003B /* Routes */,
+				A1B2C30000000000000000C5 /* Friends */,
+				A1B2C30000000000000000CA /* Notifications */,
 				A1B2C30000000000000000A8 /* Profile */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		A1B2C30000000000000000CA /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C30000000000000000C9 /* NotificationsScene.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		A1B2C30000000000000000C5 /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C30000000000000000C4 /* FriendsScene.swift */,
+			);
+			path = Friends;
 			sourceTree = "<group>";
 		};
 		A1B2C30000000000000000A8 /* Profile */ = {
@@ -319,6 +359,14 @@
 				A1B2C3000000000000000096 /* ProfileScene.swift in Sources */,
 				A1B2C3000000000000000097 /* EditProfileScene.swift in Sources */,
 				A1B2C3000000000000000098 /* ProfileAvatarView.swift in Sources */,
+				A1B2C30000000000000000B1 /* FriendRelationship.swift in Sources */,
+				A1B2C30000000000000000B2 /* FriendsRepository.swift in Sources */,
+				A1B2C30000000000000000B3 /* FriendsViewModel.swift in Sources */,
+				A1B2C30000000000000000B4 /* FriendsScene.swift in Sources */,
+				A1B2C30000000000000000B5 /* AppNotification.swift in Sources */,
+				A1B2C30000000000000000B6 /* AppNotificationsStore.swift in Sources */,
+				A1B2C30000000000000000B7 /* NotificationsViewModel.swift in Sources */,
+				A1B2C30000000000000000B8 /* NotificationsScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

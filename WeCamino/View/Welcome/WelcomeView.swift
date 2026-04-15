@@ -18,12 +18,18 @@ private enum WelcomeLayout {
     static let miniLandscapeOrbSize: CGFloat = 52
     static let miniLandscapeOrbOffset = CGSize(width: 24, height: -18)
     static let miniLandscapeSymbolSize: CGFloat = 28
+
+    static let notificationButtonSize: CGFloat = 44
+    static let notificationContainerSize = CGSize(width: 52, height: 52)
+    static let notificationBadgeMinSize: CGFloat = 20
+    static let notificationBadgePadding = CGSize(width: 4, height: 4)
 }
 
 /// Home surface focused on quick route discovery and future social entry points.
 struct WelcomeView: View {
     @Environment(\.appStrings) private var strings
     @Environment(\.colorScheme) private var colorScheme
+    @AppStorage(NotificationStorageKey.pendingFriendRequests) private var pendingNotificationCount = 0
 
     let heroNamespace: Namespace.ID
 
@@ -133,13 +139,37 @@ struct WelcomeView: View {
 
             Spacer()
 
-            Button {} label: {
-                Image(systemName: "bell")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(palette.textPrimary)
-                    .frame(width: 44, height: 44)
-                    .background(palette.surfaceMuted, in: Circle())
+            Button(action: viewModel.notificationsTapped) {
+                ZStack(alignment: .topTrailing) {
+                    Image(systemName: pendingNotificationCount == 0 ? "bell" : "bell.badge.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(palette.textPrimary)
+                        .frame(
+                            width: WelcomeLayout.notificationButtonSize,
+                            height: WelcomeLayout.notificationButtonSize
+                        )
+                        .background(palette.surfaceMuted, in: Circle())
+
+                    if pendingNotificationCount > 0 {
+                        Text("\(min(pendingNotificationCount, 9))")
+                            .font(.system(size: 11, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                            .frame(
+                                minWidth: WelcomeLayout.notificationBadgeMinSize,
+                                minHeight: WelcomeLayout.notificationBadgeMinSize
+                            )
+                            .background(Color.red, in: Capsule())
+                            .padding(.top, WelcomeLayout.notificationBadgePadding.height)
+                            .padding(.trailing, WelcomeLayout.notificationBadgePadding.width)
+                    }
+                }
+                .frame(
+                    width: WelcomeLayout.notificationContainerSize.width,
+                    height: WelcomeLayout.notificationContainerSize.height
+                )
             }
+            .accessibilityLabel(strings.notificationsTitle)
+            .accessibilityValue("\(pendingNotificationCount)")
             .buttonStyle(.plain)
         }
     }

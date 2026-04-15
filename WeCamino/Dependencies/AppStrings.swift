@@ -436,6 +436,470 @@ extension AppStrings {
     )
 }
 
+extension AppStrings {
+    var tabFriends: String {
+        switch language {
+        case .spanish:
+            "Amigos"
+        case .french:
+            "Amis"
+        case .english, .system:
+            "Friends"
+        }
+    }
+
+    var friendsTitle: String {
+        switch language {
+        case .spanish:
+            "Amigos"
+        case .french:
+            "Amis"
+        case .english, .system:
+            "Friends"
+        }
+    }
+
+    var friendsSubtitle: String {
+        switch language {
+        case .spanish:
+            "Gestiona tu círculo del Camino con solicitudes recibidas, peticiones enviadas y amigos ya aceptados."
+        case .french:
+            "Gérez votre cercle du Camino avec les demandes reçues, envoyées et les amis déjà acceptés."
+        case .english, .system:
+            "Manage your Camino circle with incoming requests, sent invitations and accepted friends."
+        }
+    }
+
+    var friendsCountTitle: String {
+        switch language {
+        case .spanish:
+            "Amigos"
+        case .french:
+            "Amis"
+        case .english, .system:
+            "Friends"
+        }
+    }
+
+    var requestsCountTitle: String {
+        switch language {
+        case .spanish:
+            "Recibidas"
+        case .french:
+            "Reçues"
+        case .english, .system:
+            "Incoming"
+        }
+    }
+
+    var sentCountTitle: String {
+        switch language {
+        case .spanish:
+            "Enviadas"
+        case .french:
+            "Envoyées"
+        case .english, .system:
+            "Sent"
+        }
+    }
+
+    var friendsSegmentFriends: String {
+        switch language {
+        case .spanish:
+            "Amigos"
+        case .french:
+            "Amis"
+        case .english, .system:
+            "Friends"
+        }
+    }
+
+    var friendsSegmentRequests: String {
+        switch language {
+        case .spanish:
+            "Solicitudes"
+        case .french:
+            "Demandes"
+        case .english, .system:
+            "Requests"
+        }
+    }
+
+    var friendsSegmentDiscover: String {
+        switch language {
+        case .spanish:
+            "Descubrir"
+        case .french:
+            "Découvrir"
+        case .english, .system:
+            "Discover"
+        }
+    }
+
+    var friendsListTitle: String {
+        switch language {
+        case .spanish:
+            "Tu círculo"
+        case .french:
+            "Votre cercle"
+        case .english, .system:
+            "Your circle"
+        }
+    }
+
+    var friendsListSubtitle: String {
+        switch language {
+        case .spanish:
+            "Peregrinos que ya forman parte de tu red y que verás más adelante en el timeline social."
+        case .french:
+            "Pèlerins déjà dans votre réseau et que vous verrez plus tard dans la timeline sociale."
+        case .english, .system:
+            "Pilgrims already in your network and ready for the future social timeline."
+        }
+    }
+
+    var requestsListTitle: String {
+        switch language {
+        case .spanish:
+            "Gestionar solicitudes"
+        case .french:
+            "Gérer les demandes"
+        case .english, .system:
+            "Manage requests"
+        }
+    }
+
+    var requestsListSubtitle: String {
+        switch language {
+        case .spanish:
+            "Mismo flujo base que en Instagram: recibes, aceptas o rechazas; cuando envías, puedes cancelar."
+        case .french:
+            "Même logique de base qu'Instagram : vous recevez, acceptez ou refusez ; si vous envoyez, vous pouvez annuler."
+        case .english, .system:
+            "The same core Instagram-style flow: receive, accept or decline; when you send, you can still cancel."
+        }
+    }
+
+    var discoverListTitle: String {
+        switch language {
+        case .spanish:
+            "Descubrir peregrinos"
+        case .french:
+            "Découvrir des pèlerins"
+        case .english, .system:
+            "Discover pilgrims"
+        }
+    }
+
+    var discoverListSubtitle: String {
+        switch language {
+        case .spanish:
+            "Explora posibles compañeros de Camino y envía una solicitud de amistad en un toque."
+        case .french:
+            "Explorez de nouveaux compagnons de Camino et envoyez une demande d'amitié en un geste."
+        case .english, .system:
+            "Explore potential Camino companions and send a friendship request in one tap."
+        }
+    }
+
+    var incomingRequestsTitle: String {
+        switch language {
+        case .spanish:
+            "Solicitudes recibidas"
+        case .french:
+            "Demandes reçues"
+        case .english, .system:
+            "Incoming requests"
+        }
+    }
+
+    var outgoingRequestsTitle: String {
+        switch language {
+        case .spanish:
+            "Solicitudes enviadas"
+        case .french:
+            "Demandes envoyées"
+        case .english, .system:
+            "Sent requests"
+        }
+    }
+
+    var friendsEmptyTitle: String {
+        switch language {
+        case .spanish:
+            "Todavía no tienes amigos"
+        case .french:
+            "Vous n'avez pas encore d'amis"
+        case .english, .system:
+            "No friends yet"
+        }
+    }
+
+    var friendsEmptySubtitle: String {
+        switch language {
+        case .spanish:
+            "Cuando aceptes o te acepten una solicitud, tu red aparecerá aquí."
+        case .french:
+            "Quand une demande sera acceptée, votre réseau apparaîtra ici."
+        case .english, .system:
+            "Once a request is accepted, your Camino network will appear here."
+        }
+    }
+
+    var requestsEmptyTitle: String {
+        switch language {
+        case .spanish:
+            "No hay solicitudes pendientes"
+        case .french:
+            "Aucune demande en attente"
+        case .english, .system:
+            "No pending requests"
+        }
+    }
+
+    var requestsEmptySubtitle: String {
+        switch language {
+        case .spanish:
+            "Ahora mismo no tienes nada que revisar ni ninguna invitación enviada esperando respuesta."
+        case .french:
+            "Vous n'avez rien à revoir ni aucune invitation envoyée en attente de réponse."
+        case .english, .system:
+            "There is nothing to review right now and no sent invitation still waiting for an answer."
+        }
+    }
+
+    var discoverEmptyTitle: String {
+        switch language {
+        case .spanish:
+            "No quedan sugerencias"
+        case .french:
+            "Plus aucune suggestion"
+        case .english, .system:
+            "No more suggestions"
+        }
+    }
+
+    var discoverEmptySubtitle: String {
+        switch language {
+        case .spanish:
+            "Ya has revisado a todos los peregrinos disponibles para esta demo local."
+        case .french:
+            "Vous avez déjà parcouru tous les pèlerins disponibles dans cette démo locale."
+        case .english, .system:
+            "You already reviewed every pilgrim available in this local demo."
+        }
+    }
+
+    var friendAddAction: String {
+        switch language {
+        case .spanish:
+            "Añadir"
+        case .french:
+            "Ajouter"
+        case .english, .system:
+            "Add"
+        }
+    }
+
+    var friendAcceptAction: String {
+        switch language {
+        case .spanish:
+            "Aceptar"
+        case .french:
+            "Accepter"
+        case .english, .system:
+            "Accept"
+        }
+    }
+
+    var friendDeclineAction: String {
+        switch language {
+        case .spanish:
+            "Rechazar"
+        case .french:
+            "Refuser"
+        case .english, .system:
+            "Decline"
+        }
+    }
+
+    var friendCancelAction: String {
+        switch language {
+        case .spanish:
+            "Cancelar"
+        case .french:
+            "Annuler"
+        case .english, .system:
+            "Cancel"
+        }
+    }
+
+    var friendRemoveAction: String {
+        switch language {
+        case .spanish:
+            "Eliminar amistad"
+        case .french:
+            "Retirer l'ami"
+        case .english, .system:
+            "Remove friend"
+        }
+    }
+
+    func friendRemoveConfirmationTitle(_ name: String) -> String {
+        switch language {
+        case .spanish:
+            "Eliminar a \(name)"
+        case .french:
+            "Retirer \(name)"
+        case .english, .system:
+            "Remove \(name)"
+        }
+    }
+
+    func friendRemoveConfirmationMessage(_ name: String) -> String {
+        switch language {
+        case .spanish:
+            "Se eliminará a \(name) de tu lista de amigos. Podrás volver a enviar una solicitud más adelante."
+        case .french:
+            "\(name) sera retire de votre liste d'amis. Vous pourrez envoyer une nouvelle demande plus tard."
+        case .english, .system:
+            "\(name) will be removed from your friends list. You can send a new request later."
+        }
+    }
+
+    var friendPendingLabel: String {
+        switch language {
+        case .spanish:
+            "Enviada"
+        case .french:
+            "Envoyée"
+        case .english, .system:
+            "Sent"
+        }
+    }
+
+    var friendConnectedLabel: String {
+        switch language {
+        case .spanish:
+            "Amigos"
+        case .french:
+            "Amis"
+        case .english, .system:
+            "Friends"
+        }
+    }
+
+    var friendDetailRouteTitle: String {
+        switch language {
+        case .spanish:
+            "Camino"
+        case .french:
+            "Chemin"
+        case .english, .system:
+            "Route"
+        }
+    }
+
+    var friendDetailStageTitle: String {
+        switch language {
+        case .spanish:
+            "Etapa"
+        case .french:
+            "Etape"
+        case .english, .system:
+            "Stage"
+        }
+    }
+
+    var friendDetailLocationTitle: String {
+        switch language {
+        case .spanish:
+            "Ubicacion"
+        case .french:
+            "Position"
+        case .english, .system:
+            "Location"
+        }
+    }
+
+    var friendDetailBioTitle: String {
+        switch language {
+        case .spanish:
+            "Bio"
+        case .french:
+            "Bio"
+        case .english, .system:
+            "Bio"
+        }
+    }
+
+    var notificationsTitle: String {
+        switch language {
+        case .spanish:
+            "Notificaciones"
+        case .french:
+            "Notifications"
+        case .english, .system:
+            "Notifications"
+        }
+    }
+
+    var notificationsSubtitle: String {
+        switch language {
+        case .spanish:
+            "Aquí aparecen las peticiones de amistad pendientes para que puedas aceptarlas o rechazarlas."
+        case .french:
+            "Les demandes d'amitié en attente apparaissent ici pour être acceptées ou refusées."
+        case .english, .system:
+            "Pending friendship requests appear here so you can accept or decline them."
+        }
+    }
+
+    var notificationsEmptyTitle: String {
+        switch language {
+        case .spanish:
+            "No tienes notificaciones pendientes"
+        case .french:
+            "Aucune notification en attente"
+        case .english, .system:
+            "No pending notifications"
+        }
+    }
+
+    var notificationsEmptySubtitle: String {
+        switch language {
+        case .spanish:
+            "Cuando alguien te envíe una solicitud de amistad, la verás aquí y la campanita mostrará el contador."
+        case .french:
+            "Quand quelqu'un vous enverra une demande d'amitié, elle apparaîtra ici et la cloche affichera le compteur."
+        case .english, .system:
+            "When someone sends you a friendship request, it will appear here and the bell will show the badge."
+        }
+    }
+
+    func friendRequestNotificationTitle(_ name: String) -> String {
+        switch language {
+        case .spanish:
+            "\(name) quiere ser tu amigo"
+        case .french:
+            "\(name) veut devenir votre ami"
+        case .english, .system:
+            "\(name) wants to be your friend"
+        }
+    }
+
+    func friendRequestNotificationMessage(route: String, city: String, stage: String) -> String {
+        switch language {
+        case .spanish:
+            "\(route) · \(city) · \(stage)"
+        case .french:
+            "\(route) · \(city) · \(stage)"
+        case .english, .system:
+            "\(route) · \(city) · \(stage)"
+        }
+    }
+}
+
 private struct AppStringsEnvironmentKey: EnvironmentKey {
     static let defaultValue = AppStrings.english
 }
