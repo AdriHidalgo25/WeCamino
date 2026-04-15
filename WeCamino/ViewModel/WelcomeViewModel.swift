@@ -31,4 +31,8 @@ final class WelcomeViewModel {
     func primaryActionTapped() {
         navigator.showRouteCatalog()
     }
+
+    func notificationsTapped() {
+        navigator.showNotifications()
+    }
 }

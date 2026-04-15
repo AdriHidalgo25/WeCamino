@@ -15,56 +15,65 @@ struct AppRootView: View {
     }
 
     var body: some View {
-        let appRouter = router
-        let appPreferences = preferences
-        @Bindable var bindableRouter = appRouter
-        let strings = appPreferences.strings
+        @Bindable var bindableRouter = router
 
         NavigationStack(path: $bindableRouter.path) {
-            AppShellView(
-                dependencies: dependencies,
-                heroNamespace: heroNamespace,
-                router: appRouter
-            )
-            .navigationDestination(for: AppDestination.self) { destination in
-                switch destination {
-                case .routeCatalog:
-                    RouteCatalogScene(
-                        repository: dependencies.officialRouteRepository,
-                        heroNamespace: heroNamespace
-                    )
-                case .routeDetail(let routeID):
-                    RouteDetailScene(
-                        repository: dependencies.officialRouteRepository,
-                        routeID: routeID,
-                        heroNamespace: heroNamespace
-                    )
-                case .profileEdit:
-                    EditProfileScene(
-                        profileRepository: dependencies.userProfileRepository,
-                        routeRepository: dependencies.officialRouteRepository
-                    )
-                }
-            }
+            shellView
+                .navigationDestination(for: AppDestination.self, destination: destinationView)
         }
-        .environment(appPreferences)
-        .environment(\.appStrings, strings)
-        .environment(\.locale, appPreferences.locale)
-        .preferredColorScheme(appPreferences.colorScheme)
+        .environment(preferences)
+        .environment(\.appStrings, preferences.strings)
+        .environment(\.locale, preferences.locale)
+        .preferredColorScheme(preferences.colorScheme)
+    }
+
+    private var shellView: some View {
+        AppShellView(
+            dependencies: dependencies,
+            heroNamespace: heroNamespace,
+            router: router
+        )
+    }
+
+    @ViewBuilder
+    private func destinationView(for destination: AppDestination) -> some View {
+        switch destination {
+        case .routeCatalog:
+            RouteCatalogScene(
+                repository: dependencies.officialRouteRepository,
+                heroNamespace: heroNamespace
+            )
+        case .routeDetail(let routeID):
+            RouteDetailScene(
+                repository: dependencies.officialRouteRepository,
+                routeID: routeID,
+                heroNamespace: heroNamespace
+            )
+        case .notifications:
+            NotificationsScene(
+                friendsRepository: dependencies.friendsRepository,
+                routeRepository: dependencies.officialRouteRepository
+            )
+        case .profileEdit:
+            EditProfileScene(
+                profileRepository: dependencies.userProfileRepository,
+                routeRepository: dependencies.officialRouteRepository
+            )
+        case .friendDetail(let relationshipID):
+            FriendProfileDetailScene(
+                repository: dependencies.friendsRepository,
+                routeRepository: dependencies.officialRouteRepository,
+                relationshipID: relationshipID
+            )
+        }
     }
 }
 
 private struct AppShellView: View {
-    private enum Layout {
-        static let tabBarHorizontalPadding: CGFloat = 18
-        static let tabBarBottomPadding: CGFloat = 9
-    }
-
     @Environment(\.colorScheme) private var colorScheme
 
     let dependencies: AppDependencies
     let heroNamespace: Namespace.ID
-
     @Bindable var router: AppRouter
 
     private var palette: AppPalette {
@@ -72,38 +81,41 @@ private struct AppShellView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            shellBackground
-
-            Group {
-                switch router.selectedTab {
-                case .home:
-                    WelcomeScene(
-                        repository: dependencies.welcomeRepository,
-                        navigator: router,
-                        heroNamespace: heroNamespace
-                    )
-                case .routes:
-                    RouteCatalogScene(
-                        repository: dependencies.officialRouteRepository,
-                        heroNamespace: heroNamespace
-                    )
-                case .profile:
-                    ProfileScene(
-                        profileRepository: dependencies.userProfileRepository,
-                        routeRepository: dependencies.officialRouteRepository,
-                        navigator: router
-                    )
-                case .settings:
-                    SettingsScene()
+        shellBackground
+            .overlay {
+                Group {
+                    switch router.selectedTab {
+                    case .home:
+                        WelcomeScene(
+                            repository: dependencies.welcomeRepository,
+                            navigator: router,
+                            heroNamespace: heroNamespace
+                        )
+                    case .routes:
+                        RouteCatalogScene(
+                            repository: dependencies.officialRouteRepository,
+                            heroNamespace: heroNamespace
+                        )
+                    case .friends:
+                        FriendsScene(
+                            repository: dependencies.friendsRepository,
+                            routeRepository: dependencies.officialRouteRepository,
+                            onFriendSelected: router.showFriendDetail
+                        )
+                    case .profile:
+                        ProfileScene(
+                            profileRepository: dependencies.userProfileRepository,
+                            routeRepository: dependencies.officialRouteRepository,
+                            navigator: router
+                        )
+                    case .settings:
+                        SettingsScene()
+                    }
                 }
             }
-
-            AppTabBar(selectedTab: $router.selectedTab)
-                .padding(.horizontal, Layout.tabBarHorizontalPadding)
-                .padding(.bottom, Layout.tabBarBottomPadding)
-        }
-        .ignoresSafeArea(edges: .bottom)
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                AppTabBar(selectedTab: $router.selectedTab)
+            }
     }
 
     private var shellBackground: some View {
@@ -115,19 +127,17 @@ private struct AppShellView: View {
 private struct AppTabBar: View {
     private enum Layout {
         static let stackSpacing: CGFloat = 6
-        static let contentSpacing: CGFloat = 8
+        static let contentSpacing: CGFloat = 6
         static let iconSize: CGFloat = 15
         static let iconFrame: CGFloat = 20
-        static let selectedHorizontalPadding: CGFloat = 12
-        static let defaultHorizontalPadding: CGFloat = 10
-        static let verticalPadding: CGFloat = 9
-        static let barHorizontalPadding: CGFloat = 8
-        static let barVerticalPadding: CGFloat = 8
-        static let compactTabWidth: CGFloat = 64
-        static let shadowRadius: CGFloat = 8
-        static let shadowYOffset: CGFloat = 2
-        static let shadowOpacity: CGFloat = 0.22
-        static let titleFontSize: CGFloat = 13
+        static let tabHorizontalPadding: CGFloat = 10
+        static let tabVerticalPadding: CGFloat = 10
+        static let barHorizontalPadding: CGFloat = 16
+        static let barTopPadding: CGFloat = 10
+        static let barBottomPadding: CGFloat = 8
+        static let titleFontSize: CGFloat = 12
+        static let selectedCornerRadius: CGFloat = 14
+        static let glassOpacity: CGFloat = 0.78
     }
 
     @Environment(\.appStrings) private var strings
@@ -140,65 +150,62 @@ private struct AppTabBar: View {
     }
 
     var body: some View {
-        HStack(spacing: Layout.stackSpacing) {
-            ForEach(AppTab.allCases, id: \.self) { tab in
-                let isSelected = selectedTab == tab
+        VStack(spacing: 0) {
+            Rectangle()
+                .fill(palette.tabBarStroke)
+                .frame(height: 1)
 
-                Button {
-                    withAnimation(.snappy(duration: 0.35, extraBounce: 0.02)) {
-                        selectedTab = tab
-                    }
-                } label: {
-                    let accent = tab.accentColor
+            HStack(spacing: Layout.stackSpacing) {
+                ForEach(AppTab.allCases, id: \.self) { tab in
+                    let isSelected = selectedTab == tab
 
-                    HStack(spacing: Layout.contentSpacing) {
-                        Image(systemName: tab.iconName)
-                            .font(.system(size: Layout.iconSize, weight: .medium))
-                            .foregroundStyle(isSelected ? accent : palette.textSecondary)
-                            .frame(width: Layout.iconFrame, height: Layout.iconFrame)
+                    Button {
+                        withAnimation(.snappy(duration: 0.28, extraBounce: 0.02)) {
+                            selectedTab = tab
+                        }
+                    } label: {
+                        let accent = tab.accentColor
 
-                        if isSelected {
+                        VStack(spacing: Layout.contentSpacing) {
+                            Image(systemName: tab.iconName)
+                                .font(.system(size: Layout.iconSize, weight: .semibold))
+                                .foregroundStyle(isSelected ? accent : palette.textSecondary)
+                                .frame(width: Layout.iconFrame, height: Layout.iconFrame)
+
                             Text(tab.title(strings: strings))
                                 .font(.system(size: Layout.titleFontSize, weight: .semibold, design: .rounded))
-                                .foregroundStyle(palette.textPrimary)
+                                .foregroundStyle(isSelected ? palette.textPrimary : palette.textSecondary)
                                 .lineLimit(1)
-                                .fixedSize(horizontal: true, vertical: false)
-                                .transition(.opacity.combined(with: .move(edge: .trailing)))
                         }
-                    }
-                    .frame(maxWidth: .infinity, alignment: isSelected ? .leading : .center)
-                    .padding(.horizontal, isSelected ? Layout.selectedHorizontalPadding : Layout.defaultHorizontalPadding)
-                    .padding(.vertical, Layout.verticalPadding)
-                    .background(
-                        Capsule(style: .continuous)
-                            .fill(isSelected ? palette.selectedTabFill : Color.clear)
-                            .overlay(
-                                Capsule(style: .continuous)
-                                    .stroke(isSelected ? palette.border : Color.clear, lineWidth: 1)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, Layout.tabHorizontalPadding)
+                        .padding(.vertical, Layout.tabVerticalPadding)
+                        .background(
+                            RoundedRectangle(
+                                cornerRadius: Layout.selectedCornerRadius,
+                                style: .continuous
                             )
-                    )
+                            .fill(isSelected ? palette.selectedTabFill : Color.clear)
+                        )
+                    }
+                    .buttonStyle(.plain)
                 }
-                .frame(width: isSelected ? nil : Layout.compactTabWidth)
-                .frame(maxWidth: isSelected ? .infinity : nil)
-                .layoutPriority(isSelected ? 1 : 0)
-                .buttonStyle(.plain)
             }
+            .padding(.horizontal, Layout.barHorizontalPadding)
+            .padding(.top, Layout.barTopPadding)
+            .padding(.bottom, Layout.barBottomPadding)
         }
-        .padding(.horizontal, Layout.barHorizontalPadding)
-        .padding(.vertical, Layout.barVerticalPadding)
-        .background(
-            Capsule(style: .continuous)
-                .fill(palette.surface)
-                .overlay(
-                    Capsule(style: .continuous)
-                        .stroke(palette.tabBarStroke, lineWidth: 1)
-                )
-        )
-        .shadow(
-            color: palette.shadow.opacity(Layout.shadowOpacity),
-            radius: Layout.shadowRadius,
-            y: Layout.shadowYOffset
-        )
+        .frame(maxWidth: .infinity)
+        .background {
+            ZStack {
+                Rectangle()
+                    .fill(.ultraThinMaterial)
+
+                Rectangle()
+                    .fill(palette.surface.opacity(Layout.glassOpacity))
+            }
+            .ignoresSafeArea(edges: .bottom)
+        }
     }
 }
 
@@ -209,6 +216,8 @@ private extension AppTab {
             strings.tabHome
         case .routes:
             strings.tabRoutes
+        case .friends:
+            strings.tabFriends
         case .profile:
             strings.tabProfile
         case .settings:
@@ -222,6 +231,8 @@ private extension AppTab {
             "house.fill"
         case .routes:
             "map"
+        case .friends:
+            "person.2.fill"
         case .profile:
             "person.crop.circle"
         case .settings:
@@ -235,6 +246,8 @@ private extension AppTab {
             Color(red: 0.99, green: 0.63, blue: 0.24)
         case .routes:
             Color(red: 0.33, green: 0.66, blue: 0.96)
+        case .friends:
+            Color(red: 0.88, green: 0.52, blue: 0.35)
         case .profile:
             Color(red: 0.47, green: 0.73, blue: 0.45)
         case .settings:

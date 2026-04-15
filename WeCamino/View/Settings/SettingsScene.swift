@@ -7,6 +7,9 @@ struct SettingsScene: View {
         static let topPadding: CGFloat = 24
         static let embeddedTopPadding: CGFloat = 18
         static let bottomPadding: CGFloat = 120
+        static let appearanceOptionHeight: CGFloat = 92
+        static let appearanceIconSize: CGFloat = 34
+        static let appearanceIconCornerRadius: CGFloat = 12
     }
 
     @Environment(AppPreferencesStore.self) private var preferences
@@ -29,7 +32,6 @@ struct SettingsScene: View {
                 settingsHeader
                 languageSection
                 appearanceSection
-                previewSection
             }
             .padding(.horizontal, Layout.horizontalPadding)
             .safeAreaPadding(.top, isEmbeddedInNavigation ? Layout.embeddedTopPadding : Layout.topPadding)
@@ -88,101 +90,34 @@ struct SettingsScene: View {
                             preferences.appearance = option
                         }
                     } label: {
-                        VStack(alignment: .leading, spacing: 14) {
+                        VStack(spacing: 10) {
                             Image(systemName: iconName(for: option))
-                                .font(.system(size: 20, weight: .bold))
+                                .font(.system(size: 17, weight: .bold))
                                 .foregroundStyle(preferences.appearance == option ? palette.textPrimary : palette.textSecondary)
-                                .frame(width: 42, height: 42)
+                                .frame(width: Layout.appearanceIconSize, height: Layout.appearanceIconSize)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    RoundedRectangle(cornerRadius: Layout.appearanceIconCornerRadius, style: .continuous)
                                         .fill(preferences.appearance == option ? palette.accentSoft : palette.surfaceMuted)
                                 )
 
                             Text(strings.appearanceLabel(for: option))
-                                .font(.system(size: 15, weight: .bold, design: .rounded))
+                                .font(.system(size: 13, weight: .bold, design: .rounded))
                                 .foregroundStyle(palette.textPrimary)
-
-                            Text(appearanceDetail(for: option))
-                                .font(.system(size: 13, weight: .medium, design: .rounded))
-                                .foregroundStyle(palette.textSecondary)
-                                .multilineTextAlignment(.leading)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.78)
                         }
-                        .padding(16)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 8)
+                        .frame(maxWidth: .infinity, minHeight: Layout.appearanceOptionHeight, alignment: .center)
                         .background(
-                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
                                 .fill(preferences.appearance == option ? palette.surfaceMuted : palette.surface)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                    RoundedRectangle(cornerRadius: 20, style: .continuous)
                                         .stroke(preferences.appearance == option ? palette.accent.opacity(0.38) : palette.border, lineWidth: 1)
                                 )
                         )
                     }
                     .buttonStyle(.plain)
-                }
-            }
-        }
-    }
-
-    private var previewSection: some View {
-        settingsCard(
-            title: strings.previewSectionTitle,
-            subtitle: strings.personalizedCopySubtitle
-        ) {
-            VStack(alignment: .leading, spacing: 18) {
-                HStack {
-                    Label(strings.previewBadge, systemImage: "sparkles")
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
-                        .foregroundStyle(palette.accent)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 8)
-                        .background(palette.accentSoft, in: Capsule())
-
-                    Spacer()
-
-                    Text(strings.appearanceLabel(for: preferences.appearance))
-                        .font(.system(size: 12, weight: .semibold, design: .rounded))
-                        .foregroundStyle(palette.textSecondary)
-                }
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(strings.previewTitle)
-                        .font(.system(size: 26, weight: .bold, design: .rounded))
-                        .foregroundStyle(palette.textPrimary)
-
-                    Text(strings.previewSubtitle)
-                        .font(.system(size: 15, weight: .medium, design: .rounded))
-                        .foregroundStyle(palette.textSecondary)
-                }
-
-                HStack(spacing: 12) {
-                    compactPreviewCard(
-                        title: strings.languageSectionTitle,
-                        value: strings.languageLabel(for: preferences.language)
-                    )
-
-                    compactPreviewCard(
-                        title: strings.appearanceSectionTitle,
-                        value: strings.appearanceLabel(for: preferences.appearance)
-                    )
-                }
-
-                HStack(spacing: 12) {
-                    Image(systemName: "character.book.closed.fill")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundStyle(palette.accent)
-                        .frame(width: 42, height: 42)
-                        .background(palette.accentSoft, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(strings.personalizedCopyTitle)
-                            .font(.system(size: 15, weight: .bold, design: .rounded))
-                            .foregroundStyle(palette.textPrimary)
-
-                        Text(strings.personalizedCopySubtitle)
-                            .font(.system(size: 13, weight: .medium, design: .rounded))
-                            .foregroundStyle(palette.textSecondary)
-                    }
                 }
             }
         }
@@ -259,24 +194,6 @@ struct SettingsScene: View {
         .buttonStyle(.plain)
     }
 
-    private func compactPreviewCard(title: String, value: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.system(size: 12, weight: .medium, design: .rounded))
-                .foregroundStyle(palette.textSecondary)
-
-            Text(value)
-                .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundStyle(palette.textPrimary)
-        }
-        .padding(14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .fill(palette.surfaceMuted)
-        )
-    }
-
     private func languageDetail(for option: AppLanguage) -> String {
         switch option {
         case .system:
@@ -314,38 +231,6 @@ struct SettingsScene: View {
                 "Utilise l'interface en français."
             case .english, .system:
                 "Use the app interface in French."
-            }
-        }
-    }
-
-    private func appearanceDetail(for option: AppAppearance) -> String {
-        switch option {
-        case .system:
-            switch strings.language {
-            case .spanish:
-                "Respeta el modo del iPhone."
-            case .french:
-                "Respecte l'apparence de l'iPhone."
-            case .english, .system:
-                "Match the iPhone appearance."
-            }
-        case .light:
-            switch strings.language {
-            case .spanish:
-                "Mantén la app luminosa y clara."
-            case .french:
-                "Gardez l'app claire et lumineuse."
-            case .english, .system:
-                "Keep the app bright and airy."
-            }
-        case .dark:
-            switch strings.language {
-            case .spanish:
-                "Activa una estética más nocturna."
-            case .french:
-                "Passez à une ambiance plus sombre."
-            case .english, .system:
-                "Switch to a darker visual mood."
             }
         }
     }
