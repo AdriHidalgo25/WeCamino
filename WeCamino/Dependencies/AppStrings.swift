@@ -1,5 +1,10 @@
 import SwiftUI
 
+/// Localized string catalog used by SwiftUI views.
+///
+/// The app currently keeps copy in code to support fast iteration while the
+/// product language is still evolving. The API mirrors a future `.strings`
+/// migration by grouping all consumer-facing text behind a single value.
 struct AppStrings {
     let language: AppLanguage
 
@@ -102,6 +107,8 @@ struct AppStrings {
     let lightLabel: String
     let darkLabel: String
 
+    // MARK: - Factory
+
     static func make(for language: AppLanguage) -> AppStrings {
         switch language {
         case .spanish:
@@ -112,6 +119,8 @@ struct AppStrings {
             .english
         }
     }
+
+    // MARK: - Labels
 
     func languageLabel(for option: AppLanguage) -> String {
         switch option {
@@ -137,6 +146,8 @@ struct AppStrings {
         }
     }
 
+    // MARK: - Formatting
+
     func stageValue(_ number: Int) -> String {
         switch language {
         case .spanish:
@@ -148,6 +159,8 @@ struct AppStrings {
         }
     }
 }
+
+// MARK: - Base Catalog
 
 extension AppStrings {
     static let english = AppStrings(

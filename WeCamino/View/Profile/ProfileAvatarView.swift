@@ -3,11 +3,15 @@ import UIKit
 
 /// Shared avatar renderer for the pilgrim profile.
 struct ProfileAvatarView: View {
+    // MARK: - Properties
+
     let initials: String
     let imageData: Data?
     let size: CGFloat
     let accentColor: Color
     let backgroundColor: Color
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {
@@ -28,6 +32,8 @@ struct ProfileAvatarView: View {
         .clipShape(Circle())
     }
 
+    // MARK: - Private Views
+
     private var avatarImage: Image? {
         guard
             let imageData,
@@ -39,3 +45,29 @@ struct ProfileAvatarView: View {
         return Image(uiImage: uiImage)
     }
 }
+
+#if DEBUG
+// MARK: - Previews
+
+#Preview("Profile Avatar") {
+    HStack(spacing: 18) {
+        ProfileAvatarView(
+            initials: "AC",
+            imageData: nil,
+            size: 76,
+            accentColor: .blue,
+            backgroundColor: .blue.opacity(0.14)
+        )
+
+        ProfileAvatarView(
+            initials: "WC",
+            imageData: nil,
+            size: 104,
+            accentColor: .orange,
+            backgroundColor: .orange.opacity(0.14)
+        )
+    }
+    .padding()
+    .weCaminoPreviewEnvironment()
+}
+#endif

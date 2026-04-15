@@ -5,14 +5,25 @@ import Observation
 @Observable
 /// Coordinates the read-only profile surface shown in the Profile tab.
 final class ProfileViewModel {
+    // MARK: - Dependencies
+
     private let profileRepository: any UserProfileRepository
     private let routeRepository: any OfficialRouteRepository
     private let navigator: any ProfileRouting
+
+    // MARK: - State
 
     private(set) var profile: UserProfile?
     private(set) var routesByID: [OfficialRoute.ID: OfficialRoute] = [:]
     private(set) var isLoading = false
 
+    // MARK: - Initialization
+
+    /// Creates the read-only profile view model.
+    /// - Parameters:
+    ///   - profileRepository: Source of the local pilgrim profile.
+    ///   - routeRepository: Source used to resolve the current route.
+    ///   - navigator: Router used to open edit flows.
     init(
         profileRepository: any UserProfileRepository,
         routeRepository: any OfficialRouteRepository,
@@ -23,10 +34,14 @@ final class ProfileViewModel {
         self.navigator = navigator
     }
 
+    // MARK: - Derived State
+
     var currentRoute: OfficialRoute? {
         guard let profile else { return nil }
         return routesByID[profile.currentRouteID]
     }
+
+    // MARK: - Loading
 
     func load() async {
         isLoading = true
@@ -41,6 +56,8 @@ final class ProfileViewModel {
         routesByID = Dictionary(uniqueKeysWithValues: routes.map { ($0.id, $0) })
         isLoading = false
     }
+
+    // MARK: - Actions
 
     func showEditProfile() {
         navigator.showProfileEdit()

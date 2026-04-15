@@ -1,10 +1,14 @@
 import Foundation
 
+/// Provides localized content for the Home surface.
 protocol WelcomeRepository: Sendable {
     func fetchWelcomeContent(for language: AppLanguage) async -> WelcomeContent
 }
 
+/// In-memory welcome copy used by the local app build.
 struct LocalWelcomeRepository: WelcomeRepository {
+    // MARK: - WelcomeRepository
+
     func fetchWelcomeContent(for language: AppLanguage) async -> WelcomeContent {
         switch language {
         case .spanish:

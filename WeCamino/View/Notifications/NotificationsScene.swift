@@ -17,8 +17,16 @@ struct NotificationsScene: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(AppPreferencesStore.self) private var preferences
 
+    // MARK: - State
+
     @State private var viewModel: NotificationsViewModel
 
+    // MARK: - Initialization
+
+    /// Creates the notification center scene.
+    /// - Parameters:
+    ///   - friendsRepository: Source of pending friend requests.
+    ///   - routeRepository: Source used to describe each requester's active Camino.
     init(
         friendsRepository: any FriendsRepository,
         routeRepository: any OfficialRouteRepository
@@ -34,6 +42,8 @@ struct NotificationsScene: View {
     private var palette: AppPalette {
         AppPalette.make(for: colorScheme)
     }
+
+    // MARK: - Body
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -52,6 +62,8 @@ struct NotificationsScene: View {
         }
     }
 
+    // MARK: - Header
+
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(strings.notificationsTitle)
@@ -63,6 +75,8 @@ struct NotificationsScene: View {
                 .foregroundStyle(palette.textSecondary)
         }
     }
+
+    // MARK: - Content
 
     @ViewBuilder
     private var content: some View {
@@ -76,6 +90,8 @@ struct NotificationsScene: View {
             }
         }
     }
+
+    // MARK: - Components
 
     private func notificationCard(for relationship: FriendRelationship) -> some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -159,6 +175,8 @@ struct NotificationsScene: View {
         .buttonStyle(.plain)
     }
 
+    // MARK: - Empty State
+
     private var emptyState: some View {
         VStack(spacing: 12) {
             Image(systemName: "bell.slash")
@@ -188,3 +206,17 @@ struct NotificationsScene: View {
         )
     }
 }
+
+#if DEBUG
+// MARK: - Previews
+
+#Preview("Notifications") {
+    NavigationStack {
+        NotificationsScene(
+            friendsRepository: AppDependencies.preview.friendsRepository,
+            routeRepository: AppDependencies.preview.officialRouteRepository
+        )
+    }
+    .weCaminoPreviewEnvironment()
+}
+#endif

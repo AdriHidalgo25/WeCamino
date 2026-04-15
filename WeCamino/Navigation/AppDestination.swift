@@ -1,5 +1,6 @@
 import Foundation
 
+/// Type-safe destinations pushed on the root `NavigationStack`.
 enum AppDestination: Hashable {
     case routeCatalog
     case routeDetail(OfficialRoute.ID)

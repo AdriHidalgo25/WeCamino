@@ -10,6 +10,8 @@ struct FriendProfile: Codable, Equatable, Identifiable, Sendable {
     var currentStageNumber: Int
     var avatarImageData: Data?
 
+    // MARK: - Display
+
     var initials: String {
         let words = name
             .split(whereSeparator: \.isWhitespace)
@@ -33,6 +35,8 @@ struct FriendRelationship: Codable, Equatable, Identifiable, Sendable {
     var pilgrim: FriendProfile
     var status: FriendshipStatus
     var lastUpdatedAt: Date
+
+    // MARK: - Identifiable
 
     var id: UUID {
         pilgrim.id

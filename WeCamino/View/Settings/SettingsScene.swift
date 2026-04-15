@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// User-facing settings screen for language and appearance preferences.
 struct SettingsScene: View {
     private enum Layout {
         static let contentSpacing: CGFloat = 22
@@ -18,6 +19,10 @@ struct SettingsScene: View {
 
     private let isEmbeddedInNavigation: Bool
 
+    // MARK: - Initialization
+
+    /// Creates the settings screen.
+    /// - Parameter isEmbeddedInNavigation: `true` when presented inside another navigation flow.
     init(isEmbeddedInNavigation: Bool = false) {
         self.isEmbeddedInNavigation = isEmbeddedInNavigation
     }
@@ -25,6 +30,8 @@ struct SettingsScene: View {
     private var palette: AppPalette {
         AppPalette.make(for: colorScheme)
     }
+
+    // MARK: - Body
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -42,6 +49,8 @@ struct SettingsScene: View {
         .toolbar(isEmbeddedInNavigation ? .visible : .hidden, for: .navigationBar)
     }
 
+    // MARK: - Header
+
     private var settingsHeader: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(strings.settingsTitle)
@@ -53,6 +62,8 @@ struct SettingsScene: View {
                 .foregroundStyle(palette.textSecondary)
         }
     }
+
+    // MARK: - Language
 
     private var languageSection: some View {
         settingsCard(
@@ -77,6 +88,8 @@ struct SettingsScene: View {
             }
         }
     }
+
+    // MARK: - Appearance
 
     private var appearanceSection: some View {
         settingsCard(
@@ -122,6 +135,8 @@ struct SettingsScene: View {
             }
         }
     }
+
+    // MARK: - Shared Components
 
     private func settingsCard<Content: View>(
         title: String,
@@ -194,6 +209,8 @@ struct SettingsScene: View {
         .buttonStyle(.plain)
     }
 
+    // MARK: - Copy
+
     private func languageDetail(for option: AppLanguage) -> String {
         switch option {
         case .system:
@@ -235,6 +252,8 @@ struct SettingsScene: View {
         }
     }
 
+    // MARK: - Icons
+
     private func iconName(for option: AppAppearance) -> String {
         switch option {
         case .system:
@@ -245,6 +264,8 @@ struct SettingsScene: View {
             "moon.fill"
         }
     }
+
+    // MARK: - Flags
 
     private func languageBadge(for option: AppLanguage, isSelected: Bool) -> some View {
         Text(flag(for: option))
@@ -273,3 +294,21 @@ struct SettingsScene: View {
         }
     }
 }
+
+#if DEBUG
+// MARK: - Previews
+
+#Preview("Settings - Light") {
+    NavigationStack {
+        SettingsScene()
+    }
+    .weCaminoPreviewEnvironment(language: .spanish, appearance: .light)
+}
+
+#Preview("Settings - Dark") {
+    NavigationStack {
+        SettingsScene()
+    }
+    .weCaminoPreviewEnvironment(language: .spanish, appearance: .dark)
+}
+#endif

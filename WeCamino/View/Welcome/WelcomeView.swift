@@ -27,11 +27,15 @@ private enum WelcomeLayout {
 
 /// Home surface focused on quick route discovery and future social entry points.
 struct WelcomeView: View {
+    // MARK: - Environment
+
     @Environment(\.appStrings) private var strings
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage(NotificationStorageKey.pendingFriendRequests) private var pendingNotificationCount = 0
 
     let heroNamespace: Namespace.ID
+
+    // MARK: - State
 
     @Bindable var viewModel: WelcomeViewModel
     @State private var hasAnimatedIn = false
@@ -39,6 +43,8 @@ struct WelcomeView: View {
     private var palette: AppPalette {
         AppPalette.make(for: colorScheme)
     }
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {
@@ -71,6 +77,8 @@ struct WelcomeView: View {
         }
     }
 
+    // MARK: - Background
+
     private var homeBackground: some View {
         ZStack {
             LinearGradient(
@@ -98,6 +106,8 @@ struct WelcomeView: View {
         }
     }
 
+    // MARK: - Loaded Content
+
     @ViewBuilder
     private func loadedState(content: WelcomeContent) -> some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -124,6 +134,8 @@ struct WelcomeView: View {
             .padding(.vertical, WelcomeLayout.contentVerticalPadding)
         }
     }
+
+    // MARK: - Header
 
     private var header: some View {
         HStack {
@@ -174,6 +186,8 @@ struct WelcomeView: View {
         }
     }
 
+    // MARK: - Hero
+
     private func heroCard(content: WelcomeContent) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("WeCamino")
@@ -217,6 +231,8 @@ struct WelcomeView: View {
         )
     }
 
+    // MARK: - Quick Actions
+
     private var quickActions: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(strings.quickActionsTitle.uppercased())
@@ -238,6 +254,8 @@ struct WelcomeView: View {
             )
         }
     }
+
+    // MARK: - Featured Routes
 
     private var featuredRoutes: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -273,6 +291,8 @@ struct WelcomeView: View {
             }
         }
     }
+
+    // MARK: - Components
 
     private func quickActionCard(
         title: String,
@@ -350,6 +370,7 @@ struct WelcomeView: View {
     }
 }
 
+/// Decorative SF Symbols-based route thumbnail used by Home cards.
 private struct MiniLandscapeCard: View {
     let systemImage: String
     let colors: [Color]
@@ -380,3 +401,36 @@ private struct MiniLandscapeCard: View {
         .clipShape(RoundedRectangle(cornerRadius: WelcomeLayout.miniLandscapeCornerRadius, style: .continuous))
     }
 }
+
+#if DEBUG
+// MARK: - Previews
+
+private struct WelcomeViewPreview: View {
+    @Namespace private var heroNamespace
+    @State private var viewModel = WelcomeViewModel(
+        repository: LocalWelcomeRepository(),
+        navigator: PreviewWelcomeViewRouter()
+    )
+
+    var body: some View {
+        WelcomeView(
+            heroNamespace: heroNamespace,
+            viewModel: viewModel
+        )
+        .task {
+            await viewModel.loadIfNeeded(for: .spanish)
+        }
+        .weCaminoPreviewEnvironment()
+    }
+}
+
+@MainActor
+private final class PreviewWelcomeViewRouter: WelcomeRouting {
+    func showRouteCatalog() {}
+    func showNotifications() {}
+}
+
+#Preview("Welcome View") {
+    WelcomeViewPreview()
+}
+#endif

@@ -3,6 +3,8 @@ import SwiftUI
 
 /// Editing flow for the local pilgrim profile.
 struct EditProfileScene: View {
+    // MARK: - Types
+
     private struct PhotoFeedback: Identifiable {
         enum Kind {
             case cancelled
@@ -47,6 +49,12 @@ struct EditProfileScene: View {
     @State private var didPickPhoto = false
     @State private var photoFeedback: PhotoFeedback?
 
+    // MARK: - Initialization
+
+    /// Creates the profile editor.
+    /// - Parameters:
+    ///   - profileRepository: Storage used to load and save the local pilgrim profile.
+    ///   - routeRepository: Source of route and stage options shown in the editor.
     init(
         profileRepository: any UserProfileRepository,
         routeRepository: any OfficialRouteRepository
@@ -62,6 +70,8 @@ struct EditProfileScene: View {
     private var palette: AppPalette {
         AppPalette.make(for: colorScheme)
     }
+
+    // MARK: - Body
 
     var body: some View {
         @Bindable var bindableViewModel = viewModel
@@ -126,6 +136,8 @@ struct EditProfileScene: View {
         }
     }
 
+    // MARK: - Identity
+
     private func identitySection(
         name: Binding<String>,
         phoneNumber: Binding<String>,
@@ -159,6 +171,8 @@ struct EditProfileScene: View {
             }
         }
     }
+
+    // MARK: - Avatar
 
     private func avatarSection(avatarImageData: Data?) -> some View {
         VStack(alignment: .leading, spacing: Layout.avatarSectionSpacing) {
@@ -217,6 +231,8 @@ struct EditProfileScene: View {
         )
     }
 
+    // MARK: - Journey
+
     private var journeySection: some View {
         editorCard(
             title: strings.editJourneySectionTitle,
@@ -248,6 +264,8 @@ struct EditProfileScene: View {
         }
     }
 
+    // MARK: - Bio
+
     private func bioSection(bio: Binding<String>) -> some View {
         editorCard(
             title: strings.editBioSectionTitle,
@@ -272,6 +290,8 @@ struct EditProfileScene: View {
         }
     }
 
+    // MARK: - Derived State
+
     private var selectedRouteName: String {
         viewModel.selectedRoute?.localizedName(for: preferences.resolvedLanguage) ?? strings.routeUnavailable
     }
@@ -293,6 +313,8 @@ struct EditProfileScene: View {
         let stage = route.stages[stageNumber - 1]
         return "\(prefix) - \(stage.start.name) / \(stage.end.name)"
     }
+
+    // MARK: - Components
 
     private func editorCard<Content: View>(
         title: String,
@@ -371,6 +393,8 @@ struct EditProfileScene: View {
         }
     }
 
+    // MARK: - Feedback
+
     private func labelChip(
         title: String,
         systemImage: String
@@ -413,6 +437,8 @@ struct EditProfileScene: View {
         .background(controlBackground)
     }
 
+    // MARK: - Styling
+
     private var cardBackground: some View {
         RoundedRectangle(cornerRadius: Layout.cardCornerRadius, style: .continuous)
             .fill(palette.surface)
@@ -427,3 +453,17 @@ struct EditProfileScene: View {
             .fill(palette.surfaceMuted)
     }
 }
+
+#if DEBUG
+// MARK: - Previews
+
+#Preview("Edit Profile") {
+    NavigationStack {
+        EditProfileScene(
+            profileRepository: LocalUserProfileRepository(),
+            routeRepository: LocalOfficialRouteRepository()
+        )
+    }
+    .weCaminoPreviewEnvironment()
+}
+#endif

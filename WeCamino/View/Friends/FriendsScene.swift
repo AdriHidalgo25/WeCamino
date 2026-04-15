@@ -32,6 +32,13 @@ struct FriendsScene: View {
     @State private var viewModel: FriendsViewModel
     @State private var pendingRemovalRelationship: FriendRelationship?
 
+    // MARK: - Initialization
+
+    /// Creates the Friends management scene.
+    /// - Parameters:
+    ///   - repository: Source of friendship relationships and actions.
+    ///   - routeRepository: Source used to display each friend's current Camino.
+    ///   - onFriendSelected: Callback invoked when the user opens a friend's profile.
     init(
         repository: any FriendsRepository,
         routeRepository: any OfficialRouteRepository,
@@ -49,6 +56,8 @@ struct FriendsScene: View {
     private var palette: AppPalette {
         AppPalette.make(for: colorScheme)
     }
+
+    // MARK: - Body
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -90,6 +99,8 @@ struct FriendsScene: View {
         }
     }
 
+    // MARK: - Header
+
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(strings.friendsTitle)
@@ -101,6 +112,8 @@ struct FriendsScene: View {
                 .foregroundStyle(palette.textSecondary)
         }
     }
+
+    // MARK: - Overview
 
     private var overview: some View {
         HStack(spacing: Layout.summarySpacing) {
@@ -123,6 +136,8 @@ struct FriendsScene: View {
             )
         }
     }
+
+    // MARK: - Segmented Control
 
     private var segmentedControl: some View {
         HStack(spacing: Layout.segmentedSpacing) {
@@ -168,6 +183,8 @@ struct FriendsScene: View {
         )
     }
 
+    // MARK: - Section Content
+
     @ViewBuilder
     private var sectionContent: some View {
         switch viewModel.selectedSection {
@@ -179,6 +196,8 @@ struct FriendsScene: View {
             discoverList
         }
     }
+
+    // MARK: - Sections
 
     private var friendsList: some View {
         VStack(alignment: .leading, spacing: Layout.sectionSpacing) {
@@ -350,6 +369,8 @@ struct FriendsScene: View {
             }
         }
     }
+
+    // MARK: - Components
 
     private func sectionHeader(title: String, subtitle: String) -> some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -589,6 +610,8 @@ struct FriendsScene: View {
         )
     }
 
+    // MARK: - Copy
+
     private func title(for section: FriendsViewModel.Section) -> String {
         switch section {
         case .friends:
@@ -611,6 +634,8 @@ struct FriendsScene: View {
             return viewModel.discoverablePilgrims.isEmpty ? nil : "\(viewModel.discoverablePilgrims.count)"
         }
     }
+
+    // MARK: - Alerts
 
     private var pendingRemovalBinding: Binding<Bool> {
         Binding(
@@ -651,6 +676,13 @@ struct FriendProfileDetailScene: View {
     @State private var routesByID: [OfficialRoute.ID: OfficialRoute] = [:]
     @State private var isRemovalConfirmationPresented = false
 
+    // MARK: - Initialization
+
+    /// Creates a read-only friend profile detail scene.
+    /// - Parameters:
+    ///   - repository: Source of friendship relationships and removal actions.
+    ///   - routeRepository: Source used to localize the friend's active Camino.
+    ///   - relationshipID: Identifier of the friend relationship to display.
     init(
         repository: any FriendsRepository,
         routeRepository: any OfficialRouteRepository,
@@ -664,6 +696,8 @@ struct FriendProfileDetailScene: View {
     private var palette: AppPalette {
         AppPalette.make(for: colorScheme)
     }
+
+    // MARK: - Body
 
     var body: some View {
         detailContent
@@ -693,6 +727,8 @@ struct FriendProfileDetailScene: View {
         }
     }
 
+    // MARK: - Content
+
     @ViewBuilder
     private var detailContent: some View {
         if let relationship {
@@ -714,6 +750,8 @@ struct FriendProfileDetailScene: View {
         }
     }
 
+    // MARK: - Toolbar
+
     @ToolbarContentBuilder
     private var optionsToolbarItem: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
@@ -734,6 +772,8 @@ struct FriendProfileDetailScene: View {
             }
         }
     }
+
+    // MARK: - Sections
 
     private func header(for relationship: FriendRelationship) -> some View {
         VStack(spacing: 12) {
@@ -827,6 +867,8 @@ struct FriendProfileDetailScene: View {
         )
     }
 
+    // MARK: - Components
+
     private func detailRow(title: String, value: String, symbolName: String) -> some View {
         HStack(spacing: 12) {
             Image(systemName: symbolName)
@@ -846,6 +888,8 @@ struct FriendProfileDetailScene: View {
             }
         }
     }
+
+    // MARK: - Actions
 
     private func routeName(for relationship: FriendRelationship) -> String {
         routesByID[relationship.pilgrim.currentRouteID]?.localizedName(for: preferences.resolvedLanguage) ?? ""
@@ -868,6 +912,7 @@ struct FriendProfileDetailScene: View {
     }
 }
 
+/// Reusable swipe-to-reveal container for destructive list actions.
 private struct SwipeRevealCard<Content: View, ActionLabel: View, ActionBackground: View>: View {
     @State private var settledOffset: CGFloat = 0
     @State private var dragTranslation: CGFloat = 0
@@ -887,6 +932,8 @@ private struct SwipeRevealCard<Content: View, ActionLabel: View, ActionBackgroun
     private var isActionVisible: Bool {
         abs(totalOffset) > 1
     }
+
+    // MARK: - Body
 
     var body: some View {
         ZStack(alignment: .trailing) {
@@ -927,6 +974,8 @@ private struct SwipeRevealCard<Content: View, ActionLabel: View, ActionBackgroun
         .clipped()
     }
 
+    // MARK: - Gestures
+
     private var dragGesture: some Gesture {
         DragGesture(minimumDistance: 12, coordinateSpace: .local)
             .onChanged { value in
@@ -962,3 +1011,33 @@ private struct SwipeRevealCard<Content: View, ActionLabel: View, ActionBackgroun
             }
     }
 }
+
+#if DEBUG
+// MARK: - Previews
+
+private enum FriendsPreviewData {
+    static let firstFriendID = UUID(uuidString: "A0000000-0000-0000-0000-000000000001") ?? UUID()
+}
+
+#Preview("Friends") {
+    NavigationStack {
+        FriendsScene(
+            repository: AppDependencies.preview.friendsRepository,
+            routeRepository: AppDependencies.preview.officialRouteRepository,
+            onFriendSelected: { _ in }
+        )
+    }
+    .weCaminoPreviewEnvironment()
+}
+
+#Preview("Friend Detail") {
+    NavigationStack {
+        FriendProfileDetailScene(
+            repository: AppDependencies.preview.friendsRepository,
+            routeRepository: AppDependencies.preview.officialRouteRepository,
+            relationshipID: FriendsPreviewData.firstFriendID
+        )
+    }
+    .weCaminoPreviewEnvironment()
+}
+#endif

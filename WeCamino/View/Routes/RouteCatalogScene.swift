@@ -46,10 +46,14 @@ private enum RouteCatalogLayout {
 
 /// Lists the official Camino routes with a compact, comparison-first layout.
 struct RouteCatalogScene: View {
+    // MARK: - Environment
+
     @Environment(\.appStrings) private var strings
     @Environment(\.colorScheme) private var colorScheme
 
     let heroNamespace: Namespace.ID
+
+    // MARK: - State
 
     @State private var viewModel: RouteCatalogViewModel
     @State private var hasAnimatedIn = false
@@ -58,6 +62,12 @@ struct RouteCatalogScene: View {
         AppPalette.make(for: colorScheme)
     }
 
+    // MARK: - Initialization
+
+    /// Creates the route catalog scene.
+    /// - Parameters:
+    ///   - repository: Source of official Camino routes.
+    ///   - heroNamespace: Namespace used to link catalog rows with route detail transitions.
     init(
         repository: any OfficialRouteRepository,
         heroNamespace: Namespace.ID
@@ -65,6 +75,8 @@ struct RouteCatalogScene: View {
         self.heroNamespace = heroNamespace
         _viewModel = State(initialValue: RouteCatalogViewModel(repository: repository))
     }
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {
@@ -109,10 +121,14 @@ struct RouteCatalogScene: View {
         }
     }
 
+    // MARK: - Background
+
     private var routeCatalogBackground: some View {
         palette.backgroundMiddle
             .ignoresSafeArea()
     }
+
+    // MARK: - Header
 
     private var routeHeader: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -126,6 +142,8 @@ struct RouteCatalogScene: View {
         }
     }
 
+    // MARK: - Summary
+
     private var routeSummary: some View {
         HStack(spacing: RouteCatalogLayout.summarySpacing) {
             summaryPill(title: strings.tabRoutes, value: "\(viewModel.routes.count)")
@@ -133,6 +151,8 @@ struct RouteCatalogScene: View {
             summaryPill(title: strings.layersTitle, value: strings.layersValue)
         }
     }
+
+    // MARK: - Route List
 
     private var routeRows: some View {
         VStack(spacing: RouteCatalogLayout.routeRowSpacing) {
@@ -144,6 +164,8 @@ struct RouteCatalogScene: View {
             }
         }
     }
+
+    // MARK: - Components
 
     private func summaryPill(title: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
@@ -241,6 +263,7 @@ struct RouteCatalogScene: View {
     }
 }
 
+/// Compact visual identifier used by route rows.
 private struct RouteThumbnail: View {
     let style: OfficialRouteVisualStyle
     let code: String
@@ -292,6 +315,8 @@ struct OfficialRouteVisualStyle {
     let mood: String
     let miniLabel: String
 }
+
+// MARK: - Route Visual Metadata
 
 extension OfficialRoute.ID {
     func localizedMood(for language: AppLanguage) -> String {
@@ -402,3 +427,25 @@ extension OfficialRoute.ID {
         }
     }
 }
+
+#if DEBUG
+// MARK: - Previews
+
+private struct RouteCatalogScenePreview: View {
+    @Namespace private var heroNamespace
+
+    var body: some View {
+        NavigationStack {
+            RouteCatalogScene(
+                repository: LocalOfficialRouteRepository(),
+                heroNamespace: heroNamespace
+            )
+        }
+        .weCaminoPreviewEnvironment()
+    }
+}
+
+#Preview("Route Catalog") {
+    RouteCatalogScenePreview()
+}
+#endif

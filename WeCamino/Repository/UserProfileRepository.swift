@@ -16,9 +16,15 @@ actor LocalUserProfileRepository: UserProfileRepository {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
 
+    // MARK: - Initialization
+
+    /// Creates the local user profile repository.
+    /// - Parameter userDefaults: Store used to persist the local pilgrim profile.
     init(userDefaults: UserDefaults = .standard) {
         self.userDefaults = userDefaults
     }
+
+    // MARK: - UserProfileRepository
 
     func fetchProfile() async -> UserProfile {
         guard
