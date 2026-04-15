@@ -22,8 +22,17 @@ struct ProfileScene: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(AppPreferencesStore.self) private var preferences
 
+    // MARK: - State
+
     @State private var viewModel: ProfileViewModel
 
+    // MARK: - Initialization
+
+    /// Creates the local pilgrim profile scene.
+    /// - Parameters:
+    ///   - profileRepository: Source of the user's saved pilgrim profile.
+    ///   - routeRepository: Source used to resolve the user's current Camino.
+    ///   - navigator: Router used to open profile editing.
     init(
         profileRepository: any UserProfileRepository,
         routeRepository: any OfficialRouteRepository,
@@ -37,6 +46,8 @@ struct ProfileScene: View {
             )
         )
     }
+
+    // MARK: - Body
 
     private var palette: AppPalette {
         AppPalette.make(for: colorScheme)
@@ -61,6 +72,8 @@ struct ProfileScene: View {
             }
         }
     }
+
+    // MARK: - Header
 
     private var profileHeader: some View {
         VStack(alignment: .leading, spacing: Layout.headerSpacing) {
@@ -124,6 +137,8 @@ struct ProfileScene: View {
         }
     }
 
+    // MARK: - Journey
+
     private var journeySection: some View {
         VStack(alignment: .leading, spacing: Layout.sectionSpacing) {
             sectionTitle(strings.profileJourneySectionTitle)
@@ -155,6 +170,8 @@ struct ProfileScene: View {
         }
     }
 
+    // MARK: - Bio
+
     private var bioSection: some View {
         VStack(alignment: .leading, spacing: Layout.sectionSpacing) {
             sectionTitle(strings.profileBioSectionTitle)
@@ -167,6 +184,8 @@ struct ProfileScene: View {
                 .background(cardBackground)
         }
     }
+
+    // MARK: - Actions
 
     private var actionsSection: some View {
         VStack(alignment: .leading, spacing: Layout.sectionSpacing) {
@@ -189,6 +208,8 @@ struct ProfileScene: View {
             }
         }
     }
+
+    // MARK: - Components
 
     private func sectionTitle(_ text: String) -> some View {
         Text(text)
@@ -300,6 +321,8 @@ struct ProfileScene: View {
         .buttonStyle(.plain)
     }
 
+    // MARK: - Formatting
+
     private func stageDescription(for profile: UserProfile) -> String {
         let stageValue = strings.stageValue(profile.currentStageNumber)
         guard
@@ -313,6 +336,8 @@ struct ProfileScene: View {
         return "\(stageValue) - \(stage.start.name) / \(stage.end.name)"
     }
 
+    // MARK: - Styling
+
     private var cardBackground: some View {
         RoundedRectangle(cornerRadius: Layout.cardCornerRadius, style: .continuous)
             .fill(palette.surface)
@@ -322,3 +347,23 @@ struct ProfileScene: View {
             )
     }
 }
+
+#if DEBUG
+// MARK: - Previews
+
+@MainActor
+private final class PreviewProfileRouter: ProfileRouting {
+    func showProfileEdit() {}
+}
+
+#Preview("Profile") {
+    NavigationStack {
+        ProfileScene(
+            profileRepository: LocalUserProfileRepository(),
+            routeRepository: LocalOfficialRouteRepository(),
+            navigator: PreviewProfileRouter()
+        )
+    }
+    .weCaminoPreviewEnvironment()
+}
+#endif

@@ -1,11 +1,15 @@
 import Foundation
 
+/// Provides official Camino route data to catalog and detail screens.
 protocol OfficialRouteRepository: Sendable {
     func fetchRoutes() async -> [OfficialRoute]
     func fetchRoute(id: OfficialRoute.ID) async -> OfficialRoute?
 }
 
+/// Local seed-backed repository for the official route catalog.
 struct LocalOfficialRouteRepository: OfficialRouteRepository {
+    // MARK: - OfficialRouteRepository
+
     func fetchRoutes() async -> [OfficialRoute] {
         routes
     }
@@ -13,6 +17,8 @@ struct LocalOfficialRouteRepository: OfficialRouteRepository {
     func fetchRoute(id: OfficialRoute.ID) async -> OfficialRoute? {
         routes.first { $0.id == id }
     }
+
+    // MARK: - Seed Data
 
     // Seed data curated from official Xunta de Galicia and Pilgrim Office route references.
     private let routes: [OfficialRoute] = [
@@ -184,6 +190,8 @@ struct LocalOfficialRouteRepository: OfficialRouteRepository {
 
 }
 
+// MARK: - Coordinates
+
 private let routeStopCoordinatesByQuery: [String: OfficialRoute.Coordinate] = [
     "O Cebreiro, Lugo, Galicia, Spain": .init(latitude: 42.7078, longitude: -7.0439),
     "Triacastela, Lugo, Galicia, Spain": .init(latitude: 42.7571, longitude: -7.2398),
@@ -239,6 +247,8 @@ private let routeStopCoordinatesByQuery: [String: OfficialRoute.Coordinate] = [
     "Muxia, A Coruna, Galicia, Spain": .init(latitude: 43.1043, longitude: -9.2176),
     "Ribeira, A Coruna, Galicia, Spain": .init(latitude: 42.5618, longitude: -8.9902)
 ]
+
+// MARK: - Stage Factory
 
 private func stage(
     _ startName: String,

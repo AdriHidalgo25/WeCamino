@@ -10,6 +10,8 @@ struct UserProfile: Codable, Equatable, Sendable {
     var currentRouteID: OfficialRoute.ID
     var currentStageNumber: Int
 
+    // MARK: - Defaults
+
     static let `default` = UserProfile(
         name: "Alex Camino",
         phoneNumber: "+34 600 123 456",
@@ -19,6 +21,8 @@ struct UserProfile: Codable, Equatable, Sendable {
         currentRouteID: .portugues,
         currentStageNumber: 3
     )
+
+    // MARK: - Display
 
     var initials: String {
         let words = name

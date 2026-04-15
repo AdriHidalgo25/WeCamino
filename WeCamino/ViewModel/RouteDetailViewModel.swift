@@ -4,9 +4,14 @@ import MapKit
 
 @MainActor
 @Observable
+/// Coordinates route detail loading and map annotation preparation.
 final class RouteDetailViewModel {
+    // MARK: - Dependencies
+
     private let repository: any OfficialRouteRepository
     private let routeID: OfficialRoute.ID
+
+    // MARK: - State
 
     private(set) var route: OfficialRoute?
     private(set) var isLoading = false
@@ -16,6 +21,12 @@ final class RouteDetailViewModel {
     private(set) var isResolvingRouteStops = false
     private(set) var hasResolvedRouteStops = false
 
+    // MARK: - Initialization
+
+    /// Creates the route detail view model.
+    /// - Parameters:
+    ///   - repository: Source of official route metadata.
+    ///   - routeID: Identifier of the route to load.
     init(
         repository: any OfficialRouteRepository,
         routeID: OfficialRoute.ID
@@ -24,6 +35,9 @@ final class RouteDetailViewModel {
         self.routeID = routeID
     }
 
+    // MARK: - Loading
+
+    /// Loads the selected route only once.
     func loadIfNeeded() async {
         guard !hasLoaded else { return }
 
@@ -33,6 +47,7 @@ final class RouteDetailViewModel {
         isLoading = false
     }
 
+    /// Resolves the route stops into map annotations and a visible map rect.
     func loadRouteStopsIfNeeded() async {
         guard !hasResolvedRouteStops, let route else { return }
 
@@ -44,6 +59,8 @@ final class RouteDetailViewModel {
         hasResolvedRouteStops = true
         isResolvingRouteStops = false
     }
+
+    // MARK: - Map Geometry
 
     private static func makeMapRect(for stops: [RouteStopAnnotation]) -> MKMapRect? {
         guard !stops.isEmpty else { return nil }
@@ -71,6 +88,7 @@ final class RouteDetailViewModel {
     }
 }
 
+/// Map-ready representation of an official route stop.
 struct RouteStopAnnotation: Identifiable {
     let stop: OfficialRoute.Stop
     let coordinate: CLLocationCoordinate2D
@@ -80,10 +98,13 @@ struct RouteStopAnnotation: Identifiable {
     }
 }
 
+/// Resolves route stops to coordinates while caching lookups by stop id.
 actor RouteStopResolver {
     static let shared = RouteStopResolver()
 
     private var cache: [String: CLLocationCoordinate2D] = [:]
+
+    // MARK: - Resolution
 
     func resolve(stops: [OfficialRoute.Stop]) async -> [RouteStopAnnotation] {
         var resolvedStops: [RouteStopAnnotation] = []
@@ -101,6 +122,8 @@ actor RouteStopResolver {
 
         return resolvedStops
     }
+
+    // MARK: - Private
 
     private func coordinate(for stop: OfficialRoute.Stop) async -> CLLocationCoordinate2D? {
         if let persistedCoordinate = stop.coordinate?.clLocationCoordinate2D {

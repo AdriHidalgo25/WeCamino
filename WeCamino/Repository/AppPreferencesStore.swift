@@ -4,6 +4,7 @@ import SwiftUI
 
 @MainActor
 @Observable
+/// Persists language and appearance choices and exposes resolved UI settings.
 final class AppPreferencesStore {
     private enum StorageKey {
         static let language = "app.preferences.language"
@@ -11,6 +12,8 @@ final class AppPreferencesStore {
     }
 
     private let userDefaults: UserDefaults
+
+    // MARK: - Stored Preferences
 
     var language: AppLanguage {
         didSet {
@@ -24,11 +27,17 @@ final class AppPreferencesStore {
         }
     }
 
+    // MARK: - Initialization
+
+    /// Creates the preferences store.
+    /// - Parameter userDefaults: Store used to persist language and appearance choices.
     init(userDefaults: UserDefaults = .standard) {
         self.userDefaults = userDefaults
         language = AppLanguage(rawValue: userDefaults.string(forKey: StorageKey.language) ?? "") ?? .system
         appearance = AppAppearance(rawValue: userDefaults.string(forKey: StorageKey.appearance) ?? "") ?? .system
     }
+
+    // MARK: - Resolved Values
 
     var locale: Locale {
         language.locale

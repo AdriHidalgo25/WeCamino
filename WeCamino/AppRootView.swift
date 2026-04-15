@@ -4,15 +4,23 @@ import SwiftUI
 struct AppRootView: View {
     private let dependencies: AppDependencies
 
+    // MARK: - State
+
     @Namespace private var heroNamespace
     @State private var router: AppRouter
     @State private var preferences: AppPreferencesStore
 
+    // MARK: - Initialization
+
+    /// Creates the root view with the dependency graph used by the app.
+    /// - Parameter dependencies: Repositories and stores shared by the app shell.
     init(dependencies: AppDependencies) {
         self.dependencies = dependencies
         _router = State(initialValue: AppRouter())
         _preferences = State(initialValue: dependencies.preferencesStore)
     }
+
+    // MARK: - Body
 
     var body: some View {
         @Bindable var bindableRouter = router
@@ -27,6 +35,8 @@ struct AppRootView: View {
         .preferredColorScheme(preferences.colorScheme)
     }
 
+    // MARK: - Private Views
+
     private var shellView: some View {
         AppShellView(
             dependencies: dependencies,
@@ -34,6 +44,8 @@ struct AppRootView: View {
             router: router
         )
     }
+
+    // MARK: - Navigation
 
     @ViewBuilder
     private func destinationView(for destination: AppDestination) -> some View {
@@ -69,6 +81,7 @@ struct AppRootView: View {
     }
 }
 
+/// Hosts the currently selected tab inside the app background.
 private struct AppShellView: View {
     @Environment(\.colorScheme) private var colorScheme
 
@@ -79,6 +92,8 @@ private struct AppShellView: View {
     private var palette: AppPalette {
         AppPalette.make(for: colorScheme)
     }
+
+    // MARK: - Body
 
     var body: some View {
         shellBackground
@@ -118,12 +133,15 @@ private struct AppShellView: View {
             }
     }
 
+    // MARK: - Private Views
+
     private var shellBackground: some View {
         palette.backgroundMiddle
         .ignoresSafeArea()
     }
 }
 
+/// Bottom navigation component shared by every top-level tab.
 private struct AppTabBar: View {
     private enum Layout {
         static let stackSpacing: CGFloat = 6
@@ -148,6 +166,8 @@ private struct AppTabBar: View {
     private var palette: AppPalette {
         AppPalette.make(for: colorScheme)
     }
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: 0) {
@@ -209,6 +229,8 @@ private struct AppTabBar: View {
     }
 }
 
+// MARK: - Tab Metadata
+
 private extension AppTab {
     func title(strings: AppStrings) -> String {
         switch self {
@@ -255,3 +277,30 @@ private extension AppTab {
         }
     }
 }
+
+#if DEBUG
+// MARK: - Preview Support
+
+extension View {
+    /// Applies the same environment values the app root provides at runtime.
+    @MainActor
+    func weCaminoPreviewEnvironment(
+        language: AppLanguage = .spanish,
+        appearance: AppAppearance = .system
+    ) -> some View {
+        let userDefaults = UserDefaults(suiteName: "WeCamino.preview.environment") ?? .standard
+        let preferences = AppPreferencesStore(userDefaults: userDefaults)
+        preferences.language = language
+        preferences.appearance = appearance
+
+        return environment(preferences)
+            .environment(\.appStrings, preferences.strings)
+            .environment(\.locale, preferences.locale)
+            .preferredColorScheme(preferences.colorScheme)
+    }
+}
+
+#Preview("App Root") {
+    AppRootView(dependencies: .preview)
+}
+#endif

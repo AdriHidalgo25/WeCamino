@@ -5,13 +5,23 @@ import Observation
 @Observable
 /// Coordinates the notification center backed by pending friend requests.
 final class NotificationsViewModel {
+    // MARK: - Dependencies
+
     private let friendsRepository: any FriendsRepository
     private let routeRepository: any OfficialRouteRepository
+
+    // MARK: - State
 
     private(set) var incomingRequests: [FriendRelationship] = []
     private(set) var routesByID: [OfficialRoute.ID: OfficialRoute] = [:]
     private(set) var isLoading = false
 
+    // MARK: - Initialization
+
+    /// Creates the notifications view model.
+    /// - Parameters:
+    ///   - friendsRepository: Source of pending friendship requests.
+    ///   - routeRepository: Source used to describe each requester's active route.
     init(
         friendsRepository: any FriendsRepository,
         routeRepository: any OfficialRouteRepository
@@ -19,6 +29,8 @@ final class NotificationsViewModel {
         self.friendsRepository = friendsRepository
         self.routeRepository = routeRepository
     }
+
+    // MARK: - Loading
 
     func load() async {
         guard !isLoading else { return }
@@ -35,6 +47,8 @@ final class NotificationsViewModel {
         isLoading = false
     }
 
+    // MARK: - Actions
+
     func accept(_ relationshipID: FriendRelationship.ID) async {
         let updated = await friendsRepository.acceptRequest(from: relationshipID)
         incomingRequests = updated.filter { $0.status == .incomingRequest }
@@ -44,6 +58,8 @@ final class NotificationsViewModel {
         let updated = await friendsRepository.declineRequest(from: relationshipID)
         incomingRequests = updated.filter { $0.status == .incomingRequest }
     }
+
+    // MARK: - Formatting
 
     func routeName(for relationship: FriendRelationship, language: AppLanguage) -> String {
         routesByID[relationship.pilgrim.currentRouteID]?.localizedName(for: language) ?? ""

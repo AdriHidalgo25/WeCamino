@@ -1,11 +1,14 @@
 import Foundation
 
+/// Official Camino route with stops, stages and localized descriptive content.
 struct OfficialRoute: Identifiable, Equatable, Sendable {
+    /// Travel mode used by a route stage.
     enum StageMode: String, Sendable {
         case walking
         case maritime
     }
 
+    /// Stable route identifiers used for navigation and persistence.
     enum ID: String, CaseIterable, Hashable, Codable, Sendable {
         case frances
         case norte
@@ -19,11 +22,13 @@ struct OfficialRoute: Identifiable, Equatable, Sendable {
         case arousaUlla
     }
 
+    /// Lightweight coordinate representation kept independent from MapKit.
     struct Coordinate: Hashable, Sendable {
         let latitude: Double
         let longitude: Double
     }
 
+    /// Named place used as a stage start or end.
     struct Stop: Identifiable, Hashable, Sendable {
         let name: String
         let searchQuery: String
@@ -34,6 +39,7 @@ struct OfficialRoute: Identifiable, Equatable, Sendable {
         }
     }
 
+    /// One route segment with distance and movement mode.
     struct Stage: Identifiable, Hashable, Sendable {
         let start: Stop
         let end: Stop
@@ -52,6 +58,8 @@ struct OfficialRoute: Identifiable, Equatable, Sendable {
     let terrain: String
     let officialContext: String
     let stages: [Stage]
+
+    // MARK: - Derived Values
 
     var totalDistanceKilometers: Double {
         stages.reduce(0) { partialResult, stage in
@@ -78,6 +86,8 @@ struct OfficialRoute: Identifiable, Equatable, Sendable {
         return uniqueStops
     }
 
+    // MARK: - Localization
+
     func localizedName(for language: AppLanguage) -> String {
         id.localizedContent(for: language).name
     }
@@ -99,6 +109,7 @@ struct OfficialRoute: Identifiable, Equatable, Sendable {
     }
 }
 
+/// Localized text bundle for route metadata.
 private struct OfficialRouteLocalizedContent {
     let name: String
     let origin: String
@@ -106,6 +117,8 @@ private struct OfficialRouteLocalizedContent {
     let terrain: String
     let officialContext: String
 }
+
+// MARK: - Localized Content
 
 extension OfficialRoute.ID {
     fileprivate func localizedContent(for language: AppLanguage) -> OfficialRouteLocalizedContent {

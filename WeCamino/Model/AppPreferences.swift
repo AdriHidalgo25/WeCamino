@@ -1,11 +1,14 @@
 import Foundation
 import SwiftUI
 
+/// Supported app languages, including a device-driven system option.
 enum AppLanguage: String, CaseIterable, Codable, Sendable {
     case system
     case english
     case spanish
     case french
+
+    // MARK: - Resolution
 
     static func resolved(from locale: Locale) -> AppLanguage {
         let identifier = locale.language.languageCode?.identifier ?? locale.identifier
@@ -21,6 +24,8 @@ enum AppLanguage: String, CaseIterable, Codable, Sendable {
         return .english
     }
 
+    // MARK: - Locale
+
     var locale: Locale {
         switch self {
         case .system:
@@ -35,10 +40,13 @@ enum AppLanguage: String, CaseIterable, Codable, Sendable {
     }
 }
 
+/// Supported appearance modes for the app shell.
 enum AppAppearance: String, CaseIterable, Codable, Sendable {
     case system
     case light
     case dark
+
+    // MARK: - SwiftUI
 
     var colorScheme: ColorScheme? {
         switch self {

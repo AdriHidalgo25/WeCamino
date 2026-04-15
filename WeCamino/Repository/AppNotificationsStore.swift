@@ -9,6 +9,8 @@ final class AppNotificationsStore: ObservableObject {
     @Published private(set) var notifications: [AppNotification] = []
     @Published private(set) var isLoading = false
 
+    /// Creates the badge store.
+    /// - Parameter friendsRepository: Source used to derive friend request notifications.
     init(friendsRepository: any FriendsRepository) {
         self.friendsRepository = friendsRepository
     }

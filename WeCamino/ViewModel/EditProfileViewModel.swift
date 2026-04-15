@@ -6,8 +6,12 @@ import UIKit
 @Observable
 /// Holds the editable pilgrim state before saving it back to local storage.
 final class EditProfileViewModel {
+    // MARK: - Dependencies
+
     private let profileRepository: any UserProfileRepository
     private let routeRepository: any OfficialRouteRepository
+
+    // MARK: - State
 
     private(set) var routes: [OfficialRoute] = []
     private(set) var isLoading = false
@@ -22,6 +26,12 @@ final class EditProfileViewModel {
     var currentRouteID: OfficialRoute.ID = .portugues
     var currentStageNumber = 1
 
+    // MARK: - Initialization
+
+    /// Creates the profile editor view model.
+    /// - Parameters:
+    ///   - profileRepository: Storage used to load and save the edited profile.
+    ///   - routeRepository: Source of valid route and stage options.
     init(
         profileRepository: any UserProfileRepository,
         routeRepository: any OfficialRouteRepository
@@ -29,6 +39,8 @@ final class EditProfileViewModel {
         self.profileRepository = profileRepository
         self.routeRepository = routeRepository
     }
+
+    // MARK: - Derived State
 
     var selectedRoute: OfficialRoute? {
         routes.first { $0.id == currentRouteID }
@@ -58,6 +70,8 @@ final class EditProfileViewModel {
         && !isSaving
     }
 
+    // MARK: - Loading
+
     func loadIfNeeded() async {
         guard !hasLoaded else { return }
 
@@ -75,6 +89,8 @@ final class EditProfileViewModel {
         hasLoaded = true
         isLoading = false
     }
+
+    // MARK: - Mutations
 
     func updateRoute(to routeID: OfficialRoute.ID) {
         currentRouteID = routeID
@@ -102,6 +118,8 @@ final class EditProfileViewModel {
     func updateAvatarImageData(_ data: Data?) {
         avatarImageData = normalizedAvatarData(from: data)
     }
+
+    // MARK: - Mapping
 
     private func apply(profile: UserProfile) {
         name = profile.name
@@ -131,6 +149,8 @@ final class EditProfileViewModel {
         )
     }
 
+    // MARK: - Validation
+
     private func normalizedStageNumber(
         _ stageNumber: Int,
         for routeID: OfficialRoute.ID
@@ -138,6 +158,8 @@ final class EditProfileViewModel {
         let count = routes.first(where: { $0.id == routeID })?.stages.count ?? 1
         return min(max(stageNumber, 1), max(count, 1))
     }
+
+    // MARK: - Images
 
     private func normalizedAvatarData(from data: Data?) -> Data? {
         guard

@@ -20,10 +20,16 @@ actor LocalFriendsRepository: FriendsRepository {
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
 
+    // MARK: - Initialization
+
+    /// Creates the local friends repository.
+    /// - Parameter userDefaults: Store used to persist relationship state and pending request badges.
     init(userDefaults: UserDefaults = .standard) {
         self.userDefaults = userDefaults
         Self.bootstrapPendingNotificationCount(userDefaults: userDefaults)
     }
+
+    // MARK: - FriendsRepository
 
     func fetchRelationships() async -> [FriendRelationship] {
         let relationships = loadRelationships()
@@ -86,6 +92,8 @@ actor LocalFriendsRepository: FriendsRepository {
         }
     }
 
+    // MARK: - Persistence
+
     private func loadRelationships() -> [FriendRelationship] {
         guard
             let data = userDefaults.data(forKey: StorageKey.relationships),
@@ -116,6 +124,8 @@ actor LocalFriendsRepository: FriendsRepository {
         userDefaults.set(data, forKey: StorageKey.relationships)
         syncPendingNotificationCount(for: relationships)
     }
+
+    // MARK: - Notifications
 
     private func syncPendingNotificationCount(for relationships: [FriendRelationship]) {
         let count = relationships.reduce(into: 0) { partialResult, relationship in
@@ -149,6 +159,8 @@ actor LocalFriendsRepository: FriendsRepository {
         userDefaults.set(count, forKey: NotificationStorageKey.pendingFriendRequests)
     }
 }
+
+// MARK: - Seed Data
 
 private let defaultRelationships: [FriendRelationship] = [
     FriendRelationship(

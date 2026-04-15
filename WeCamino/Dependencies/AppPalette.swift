@@ -23,6 +23,9 @@ struct AppPalette {
 }
 
 extension AppPalette {
+    // MARK: - Factory
+
+    /// Returns the semantic palette for the active system color scheme.
     static func make(for colorScheme: ColorScheme) -> AppPalette {
         switch colorScheme {
         case .light:

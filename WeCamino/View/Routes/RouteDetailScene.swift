@@ -4,15 +4,21 @@ import MapKit
 /// Presents the official route detail with a single visual focal point and
 /// the supporting information needed to understand the route quickly.
 struct RouteDetailScene: View {
+    // MARK: - Environment
+
     @Environment(\.appStrings) private var strings
     @Environment(\.colorScheme) private var colorScheme
 
     let routeID: OfficialRoute.ID
     let heroNamespace: Namespace.ID
 
+    // MARK: - State
+
     @State private var viewModel: RouteDetailViewModel
     @State private var hasExpandedHero = false
     @State private var mapPosition: MapCameraPosition = .automatic
+
+    // MARK: - Layout
 
     private enum Layout {
         static let contentSpacing: CGFloat = 22
@@ -90,6 +96,13 @@ struct RouteDetailScene: View {
         AppPalette.make(for: colorScheme)
     }
 
+    // MARK: - Initialization
+
+    /// Creates a route detail scene for a single official route.
+    /// - Parameters:
+    ///   - repository: Source of route metadata and stages.
+    ///   - routeID: Stable identifier of the route to render.
+    ///   - heroNamespace: Namespace shared with the catalog transition source.
     init(
         repository: any OfficialRouteRepository,
         routeID: OfficialRoute.ID,
@@ -104,6 +117,8 @@ struct RouteDetailScene: View {
             )
         )
     }
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {
@@ -164,6 +179,8 @@ struct RouteDetailScene: View {
         }
     }
 
+    // MARK: - Background
+
     private var routeDetailBackground: some View {
         ZStack {
             LinearGradient(
@@ -196,6 +213,8 @@ struct RouteDetailScene: View {
                 )
         }
     }
+
+    // MARK: - Hero
 
     private func heroCard(_ route: OfficialRoute) -> some View {
         let style = route.id.visualStyle
@@ -267,6 +286,8 @@ struct RouteDetailScene: View {
         .opacity(hasExpandedHero ? 1 : Layout.collapsedHeroOpacity)
         .scaleEffect(hasExpandedHero ? 1 : Layout.collapsedHeroScale)
     }
+
+    // MARK: - Map
 
     private func routeMapSection(_ route: OfficialRoute) -> some View {
         VStack(alignment: .leading, spacing: Layout.sectionBodySpacing) {
@@ -385,6 +406,8 @@ struct RouteDetailScene: View {
         }
     }
 
+    // MARK: - Stages
+
     private func stagesSection(_ route: OfficialRoute) -> some View {
         VStack(alignment: .leading, spacing: Layout.sectionBodySpacing) {
             HStack(alignment: .top) {
@@ -420,6 +443,8 @@ struct RouteDetailScene: View {
         )
     }
 
+    // MARK: - Detail Blocks
+
     private func detailSection(
         title: String,
         body: String
@@ -444,6 +469,8 @@ struct RouteDetailScene: View {
                 )
         )
     }
+
+    // MARK: - Metadata
 
     private func routeCodeBadge(_ code: String) -> some View {
         Text(code)
@@ -516,6 +543,8 @@ struct RouteDetailScene: View {
         .background(palette.surfaceMuted, in: RoundedRectangle(cornerRadius: Layout.stageRowCornerRadius, style: .continuous))
     }
 
+    // MARK: - Loading
+
     private func loadRouteAndAnimateHero() async {
         hasExpandedHero = false
         await viewModel.loadIfNeeded()
@@ -534,3 +563,26 @@ struct RouteDetailScene: View {
         }
     }
 }
+
+#if DEBUG
+// MARK: - Previews
+
+private struct RouteDetailScenePreview: View {
+    @Namespace private var heroNamespace
+
+    var body: some View {
+        NavigationStack {
+            RouteDetailScene(
+                repository: LocalOfficialRouteRepository(),
+                routeID: .frances,
+                heroNamespace: heroNamespace
+            )
+        }
+        .weCaminoPreviewEnvironment()
+    }
+}
+
+#Preview("Route Detail") {
+    RouteDetailScenePreview()
+}
+#endif

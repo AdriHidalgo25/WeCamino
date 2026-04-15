@@ -5,20 +5,32 @@ import Observation
 @Observable
 /// Coordinates the friendship lists and local actions for the Friends tab.
 final class FriendsViewModel {
+    // MARK: - Types
+
     enum Section: String, CaseIterable, Hashable {
         case friends
         case requests
         case discover
     }
 
+    // MARK: - Dependencies
+
     private let repository: any FriendsRepository
     private let routeRepository: any OfficialRouteRepository
+
+    // MARK: - State
 
     private(set) var relationships: [FriendRelationship] = []
     private(set) var routesByID: [OfficialRoute.ID: OfficialRoute] = [:]
     private(set) var isLoading = false
     var selectedSection: Section = .friends
 
+    // MARK: - Initialization
+
+    /// Creates the Friends view model.
+    /// - Parameters:
+    ///   - repository: Source of friendship state and actions.
+    ///   - routeRepository: Source used to display route names for each pilgrim.
     init(
         repository: any FriendsRepository,
         routeRepository: any OfficialRouteRepository
@@ -26,6 +38,8 @@ final class FriendsViewModel {
         self.repository = repository
         self.routeRepository = routeRepository
     }
+
+    // MARK: - Derived Lists
 
     var friends: [FriendRelationship] {
         relationships.filter { $0.status == .friends }
@@ -43,6 +57,8 @@ final class FriendsViewModel {
         relationships.filter { $0.status == .none }
     }
 
+    // MARK: - Loading
+
     func load() async {
         guard !isLoading else { return }
         isLoading = true
@@ -56,6 +72,8 @@ final class FriendsViewModel {
 
         isLoading = false
     }
+
+    // MARK: - Actions
 
     func accept(_ relationshipID: FriendRelationship.ID) async {
         relationships = await repository.acceptRequest(from: relationshipID)
@@ -76,6 +94,8 @@ final class FriendsViewModel {
     func remove(_ relationshipID: FriendRelationship.ID) async {
         relationships = await repository.removeFriend(relationshipID)
     }
+
+    // MARK: - Formatting
 
     func routeName(for relationship: FriendRelationship, language: AppLanguage) -> String {
         routesByID[relationship.pilgrim.currentRouteID]?.localizedName(for: language) ?? ""
